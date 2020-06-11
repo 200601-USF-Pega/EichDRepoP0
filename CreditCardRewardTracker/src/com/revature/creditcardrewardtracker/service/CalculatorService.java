@@ -1,42 +1,28 @@
 package com.revature.creditcardrewardtracker.service;
 
-import java.util.ArrayList;
+import java.sql.Connection;
 import java.util.List;
 import java.util.Scanner;
 
+import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
+import com.revature.creditcardrewardtracker.dao.ICreditCardRepo;
 import com.revature.creditcardrewardtracker.models.CategoryCashBack;
 import com.revature.creditcardrewardtracker.models.CreditCard;
 
 public class CalculatorService {
 	
-	ArrayList<CreditCard> cards = new ArrayList<CreditCard>();
+	private List<CreditCard> cards;
 	
-	//this method is to simulate having cards in a DB for testing purposes, will be removed once DB added
-	private void addCards() {
-		cards.add(new CreditCard("Amex Gold", 3000));
-		List<CategoryCashBack> categories = new ArrayList<CategoryCashBack>();
-		categories.add(new CategoryCashBack("Dining", 0.04));
-		categories.add(new CategoryCashBack("Groceries", 0.04));
-		cards.get(0).setCardCashBackCategories(categories);
-		
-		cards.add(new CreditCard("Chase Freedom Unlimited", 3333));
-		List<CategoryCashBack> categories2 = new ArrayList<CategoryCashBack>();
-		categories2.add(new CategoryCashBack("Everything", 0.03));
-		cards.get(1).setCardCashBackCategories(categories2);
-		
-		cards.add(new CreditCard("BofA Cash Rewards", 2100));
-		List<CategoryCashBack> categories3 = new ArrayList<CategoryCashBack>();
-		categories3.add(new CategoryCashBack("Online", 0.03));
-		categories3.add(new CategoryCashBack("Everything", 0.01));
-		categories3.add(new CategoryCashBack("Groceries", 0.02));
-		cards.get(2).setCardCashBackCategories(categories3);
-		
+	public CalculatorService(Connection connection, String username) {
+		ICreditCardRepo ccr = new CreditCardRepoDB(connection);
+		cards = ccr.getCreditCards(username);
 	}
 	
 	public void selectBestCard(Scanner sc) {
-		this.addCards();
+		
+		sc.nextLine();
 		System.out.println("Please enter the category of the purchase.");
-		String category = sc.next();
+		String category = sc.nextLine();
 		
 		String bestCard = null;
 		double bestRate = 0.00;
@@ -63,7 +49,8 @@ public class CalculatorService {
 	}
 	
 	public void calculatePercentageBack(Scanner sc) {
-		this.addCards();
+		
+		sc.nextLine();
 		System.out.println("What are the last 4 digits of the card you plan on using?");
 		int cardNumber = sc.nextInt();
 		
