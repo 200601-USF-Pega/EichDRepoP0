@@ -51,27 +51,19 @@ public class TransactionHistoryMenu implements IUserMenu {
 				break;
 			case (4) :
 				// calc total cash back
-				System.out.println("Calculating Total Cash Back");
+				System.out.println("Total Cash Back is $" + service.getTotalCashBack());
 				break;
 			case (5) :
 				//calc total cash back for category
-				System.out.println("What category?");
-				String cashBackCategory = sc.nextLine();
-				System.out.println("Calculating Total Cash Back Earned in " + cashBackCategory);
+				System.out.println("Total Cash Back for Category is $" + service.getTotalCashBackForCategories(sc));
 				break;
 			case (6) :
 				//calc total cash back for CC
-				System.out.println("What credit card? Please provide the last 4 CC numbers.");
-				int cashBackCardID = sc.nextInt();
-				System.out.println("Calculating Total Cash Back Earned on Card " + cashBackCardID);
+				System.out.println("Total Cash Back for Card is $" + service.getTotalCashBackForCard(sc));
 				break;
 			case (7) :
 				//calc total cash back for date range
-				System.out.println("What is the start date for your range? Please use MMDDYY for the date format.");
-				int cashBackStartDate = sc.nextInt();
-				System.out.println("What is the end date for your range? Please use MMDDYY for the date format.");
-				int cashBackEndDate = sc.nextInt();
-				System.out.println("Calculating Total Spent Between " + cashBackStartDate + " and " + cashBackEndDate);
+				System.out.println("Total Cash Back for Date Range is $" + service.getTotalCashBackForDateRange(sc));
 				break;
 			case (8) :
 				isMenuActive = false;

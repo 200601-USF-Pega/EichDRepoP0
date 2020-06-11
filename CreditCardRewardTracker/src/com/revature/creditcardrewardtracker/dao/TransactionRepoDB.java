@@ -21,12 +21,13 @@ public class TransactionRepoDB implements ITransactionRepo {
 	@Override
 	public void addTransaction(Transaction newTransaction) {
 		try {
-			PreparedStatement s = connection.prepareStatement("INSERT INTO transactionrecords(date, category, transactiontotal, cardid) VALUES (?, ?, ?, ?)");
+			PreparedStatement s = connection.prepareStatement("INSERT INTO transactionrecords(date, category, transactiontotal, cashbacktotal, cardid) VALUES (?, ?, ?, ?, ?)");
 						
 			s.setDate(1, convertUtilToSQLDate(newTransaction.getDate()));
 			s.setString(2, newTransaction.getCategory());
 			s.setDouble(3,  newTransaction.getTotal());
-			s.setInt(4,  newTransaction.getCardID());
+			s.setDouble(4,  newTransaction.getCashBackTotal());
+			s.setInt(5,  newTransaction.getCardID());
 			s.executeUpdate();
 			
 		} catch (SQLException e) {
@@ -42,7 +43,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 		try {
 			Statement s = connection.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("SELECT date, category, transactiontotal, t.cardid FROM transactionrecords as t "
+			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "LEFT JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
@@ -65,7 +66,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 		try {
 			Statement s = connection.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("SELECT date, category, transactiontotal, t.cardid FROM transactionrecords as t "
+			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "LEFT JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
@@ -89,7 +90,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 		try {
 			Statement s = connection.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("SELECT date, category, transactiontotal, t.cardid FROM transactionrecords as t "
+			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "LEFT JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
@@ -115,7 +116,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 		try {
 			Statement s = connection.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("SELECT date, category, transactiontotal, t.cardid FROM transactionrecords as t "
+			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "LEFT JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
@@ -150,6 +151,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 				tempTransaction.setCategory(rs.getString("category"));
 				tempTransaction.setTotal(rs.getDouble("transactiontotal"));
 				tempTransaction.setDate(convertSQLToUtilDate(rs.getDate("date")));
+				tempTransaction.setCashBackTotal(rs.getDouble("cashbacktotal"));
 				transactionList.add(tempTransaction);
 			}
 			return transactionList;

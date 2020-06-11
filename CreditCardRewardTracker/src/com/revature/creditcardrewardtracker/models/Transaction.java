@@ -8,6 +8,7 @@ public class Transaction {
 	private Date date;
 	private String category;
 	private double total;
+	private double cashBackTotal;
 
 	public Transaction() {
 		
@@ -45,9 +46,18 @@ public class Transaction {
 		this.total = total;
 	}
 
+	public double getCashBackTotal() {
+		return cashBackTotal;
+	}
+
+	public void setCashBackTotal(double cashBackTotal) {
+		this.cashBackTotal = cashBackTotal;
+	}
+
 	@Override
 	public String toString() {
-		return "Transaction [cardID=" + cardID + ", date=" + date + ", category=" + category + ", total=" + total + "]";
+		return "Transaction [cardID=" + cardID + ", date=" + date + ", category=" + category + ", total=" + total
+				+ ", cashBackTotal=" + cashBackTotal + "]";
 	}
 
 
