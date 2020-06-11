@@ -47,11 +47,7 @@ public class TransactionHistoryMenu implements IUserMenu {
 				break;
 			case (3) :
 				//calc total spent for date range
-				System.out.println("What is the start date for your range? Please use MMDDYY for the date format.");
-				int startDate = sc.nextInt();
-				System.out.println("What is the end date for your range? Please use MMDDYY for the date format.");
-				int endDate = sc.nextInt();
-				System.out.println("Calculating Total Spent Between " + startDate + " and " + endDate);
+				System.out.println(service.getTotalForDateRange(sc));
 				break;
 			case (4) :
 				// calc total cash back

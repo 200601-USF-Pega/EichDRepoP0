@@ -120,7 +120,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
 					+ 	"') AS c ON t.cardid = c.cardid "
-					+	"WHERE c.cardId = " + cardID + ";");
+					+	"WHERE date BETWEEN '" + sqlStartDate + "' AND '" + sqlEndDate + "';");
 			
 			transactionList = createTransactionList(rs, transactionList);
 			
