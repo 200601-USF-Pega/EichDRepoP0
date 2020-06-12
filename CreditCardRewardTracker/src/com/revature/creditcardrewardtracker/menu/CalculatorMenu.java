@@ -24,11 +24,13 @@ public class CalculatorMenu implements IUserMenu {
 				//launches credit card picking tool
 				System.out.println("Launching Card Picker");
 				calcServ.selectBestCard(sc);
+				listMenuOptions();
 				break;
 			case (1) :
 				//launches cash back calculator
 				System.out.println("Launching Cash Back Calculator");
 				calcServ.calculatePercentageBack(sc);
+				listMenuOptions();
 				break;
 			case (2) :
 				//returns to main menu

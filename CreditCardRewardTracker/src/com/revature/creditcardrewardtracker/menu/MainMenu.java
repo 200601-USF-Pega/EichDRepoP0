@@ -30,14 +30,16 @@ public class MainMenu implements IUserMenu {
 			case (0) :
 				//launch calculator menu/tool
 				System.out.println("Launching calculator");
-				CalculatorMenu calcMenu = new CalculatorMenu();
+				IUserMenu calcMenu = new CalculatorMenu();
 				calcMenu.menu(sc, username, connection);
+				listMenuOptions();
 				break;
 			case (1) :
 				//add credit card, reward categories, and % back
 				System.out.println("Launching database to add a new credit card");
 				CreditCardService cardService = new CreditCardService(username, connection);
 				System.out.println(cardService.createNewCreditCard(sc).toString());
+				listMenuOptions();
 				break;
 			case (2) :
 				//add to transaction history
@@ -45,18 +47,21 @@ public class MainMenu implements IUserMenu {
 				System.out.println("Launching database to add new transaction record");
 				TransactionService transactionService = new TransactionService(username, connection);
 				System.out.println(transactionService.recordNewTransaction(sc));
+				listMenuOptions();
 				break;
 			case (3) :
 				//view transaction history
 				System.out.println("Launching transaction history tool");
-				TransactionHistoryMenu transactionHistoryMenu = new TransactionHistoryMenu();
+				IUserMenu transactionHistoryMenu = new TransactionHistoryMenu();
 				transactionHistoryMenu.menu(sc, username, connection);
+				listMenuOptions();
 				break;
 			case (4) :
-				//view credit cards on file
-				System.out.println("Launching Credit Card database");
-				CreditCardService cardService2 = new CreditCardService(username, connection);
-				System.out.println(cardService2.getCreditCards());
+				//view credit cards menu
+				System.out.println("Launching credit card records");
+				IUserMenu ccMenu = new CreditCardMenu();
+				ccMenu.menu(sc, username, connection);
+				listMenuOptions();
 				break;
 			case (5) :
 				//exit
@@ -80,8 +85,8 @@ public class MainMenu implements IUserMenu {
 		System.out.println("[0] Calculate Maximum Rewards");
 		System.out.println("[1] Add Credit Card to File");
 		System.out.println("[2] Add Transaction Record to File");
-		System.out.println("[3] View Transaction History");
-		System.out.println("[4] View Credit Cards on File");
+		System.out.println("[3] View & Modify Transaction Records");
+		System.out.println("[4] View & Modify Credit Card Records");
 		System.out.println("[5] Log out");
 	}
 

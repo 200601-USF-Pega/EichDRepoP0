@@ -40,7 +40,8 @@ public class CreditCardService {
 			card.setCardCashBackCategories(cashback.createNewCashbackCategory(input));
 			
 			card = d.addCreditCard(username, card);
-					
+			
+			System.out.println(card);
 			return card;
 		} catch (Exception e) {
 			System.out.println("Invalid input type.");

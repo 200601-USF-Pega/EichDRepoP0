@@ -21,22 +21,27 @@ public class AdminMenu implements IUserMenu {
 				//list usernames
 				System.out.println("Printing usernames:");
 				System.out.println(adminServ.getAllUsers());
+				listMenuOptions();
 				break;
 			case (1) :
 				//reset user password
 				adminServ.changeUserPassword();
+				listMenuOptions();
 				break;
 			case (2) :
 				//promote user to admin
 				adminServ.promoteUserAccount();
+				listMenuOptions();
 				break;
 			case (3) :
 				//demote admin to user
 				adminServ.demoteUserAccount();
+				listMenuOptions();
 				break;
 			case (4) :
 				//delete user account
 				adminServ.deleteUserAccount();
+				listMenuOptions();
 				break;
 			case (5) :
 				//sign out
