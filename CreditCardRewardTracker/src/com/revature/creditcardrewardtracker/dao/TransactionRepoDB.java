@@ -37,6 +37,23 @@ public class TransactionRepoDB implements ITransactionRepo {
 			e.printStackTrace();
 		}
 	}
+	
+	public Transaction getTransaction(int transactionId) {
+		List<Transaction> transactionList = new ArrayList<Transaction>();
+		
+		try {
+			Statement s = connection.createStatement();
+			ResultSet rs = s.executeQuery("SELECT * FROM transactionrecords "
+				+ "WHERE transactionid = " + transactionId + ";");
+			
+			transactionList = createTransactionList(rs, transactionList);
+			return transactionList.get(0);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 	@Override
 	public List<Transaction> listTransactions(String username) {
@@ -134,7 +151,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 			
 			transactionList = createTransactionList(rs, transactionList);
 			
-			printResultSet(rs);
+			//printResultSet(rs);
 			
 			return transactionList;
 		} catch (SQLException e) {
@@ -145,9 +162,46 @@ public class TransactionRepoDB implements ITransactionRepo {
 	}
 	
 	@Override
-	public void updateTransaction(String username) {
-		// TODO Auto-generated method stub
-		
+	public void updateTransaction(int transactionId, int option, Object obj) {
+		try {
+			Statement s = connection.createStatement();
+				switch (option) {
+					case (1) :
+						//date
+						java.util.Date date = (java.util.Date) obj;
+						java.sql.Date sqlDate = convertUtilToSQLDate(date);
+						s.executeUpdate("UPDATE transactionrecords AS t " +
+								"SET date = '" + sqlDate + "' WHERE t.transactionid = " + transactionId + ";");	
+						System.out.println("Date update executed.");
+						break;
+					case (2) :
+						//category
+						String category = (String) obj;
+						s.executeUpdate("UPDATE transactionrecords AS t " +
+							"SET category = '" + category + "' WHERE t.transactionid = " + transactionId + ";");
+						System.out.println("Category update executed.");
+						break;
+					case (3) :
+						//transaction total
+						double total = (double) obj;
+						s.executeUpdate("UPDATE transactionrecords AS t " +
+							"SET transactiontotal = " + total + " WHERE t.transactionid = " + transactionId + ";");
+						System.out.println("Transaction Total update executed.");
+						break;
+					case (4) :
+						//card
+						int cardID = (int) obj;
+						s.executeUpdate("UPDATE transactionrecords AS t " +
+							"SET cardid = " + cardID + " WHERE t.transactionid = " + transactionId + ";");
+						System.out.println("Card ID update executed.");
+						break;
+					default :
+						System.out.println("No update executed.");
+				}		
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -155,14 +209,8 @@ public class TransactionRepoDB implements ITransactionRepo {
 		
 		try {
 			Statement s = connection.createStatement();
-			ResultSet rs;
-			rs = s.executeQuery("SELECT * FROM transactionrecords as t "
-				+ "INNER JOIN ("
-					+	"SELECT cardid FROM creditcards "
-					+	"WHERE username = '" + username
-					+ 	"') AS c ON t.cardid = c.cardid;");
 			
-			printResultSet(rs);
+			this.printResultSet(username);
 			
 			System.out.println("Please input the Transaction ID for the transaction to be deleted.");
 			int option = sc.nextInt();
@@ -211,9 +259,15 @@ public class TransactionRepoDB implements ITransactionRepo {
 		return null;
 	}
 	
-	private static void printResultSet(ResultSet rs) {
-		
+	public void printResultSet(String username) {
 		try {
+			Statement s = connection.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("SELECT * FROM transactionrecords as t "
+				+ "INNER JOIN ("
+					+	"SELECT cardid FROM creditcards "
+					+	"WHERE username = '" + username
+					+ 	"') AS c ON t.cardid = c.cardid;");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			   System.out.println("Printing out transactions");
 			   int columnsNumber = rsmd.getColumnCount();

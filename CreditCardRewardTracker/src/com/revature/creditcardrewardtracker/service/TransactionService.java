@@ -60,6 +60,48 @@ public class TransactionService {
 		return list;
 	}
 	
+	public void updateTransaction(Scanner sc) {
+		d.printResultSet(username);
+		System.out.println("Please input the Transaction ID for the transaction to be updated.");
+		int id = sc.nextInt();
+		System.out.println("You selected Transaction ID " + id + " to modify. Enter YES to confirm.");
+		if (sc.next().equalsIgnoreCase("YES")) {
+			System.out.println("What would you like to update?");
+			System.out.println("Enter the option for what you'd like to modify: [1] Date; [2] Category; [3] Transaction Total; [4] CardID");
+			int option = sc.nextInt();
+			switch (option) {
+				case (1) :
+					//date
+					System.out.println("What date would you like to change it to? Please use the YYYYMMDD format.");
+					java.util.Date newDate = convertIntToDate(sc.nextInt());
+					d.updateTransaction(id, option, newDate);
+					break;
+				case (2) :
+					//category
+					sc.nextLine();
+					System.out.println("What category would you like to change it to?");
+					String newCat = sc.nextLine().toUpperCase();
+					d.updateTransaction(id, option, newCat);
+					break;
+				case (3) :
+					//transaction total
+					System.out.println("What is the new Transaction Total?");
+					double total = sc.nextDouble();
+					d.updateTransaction(id, option, total);
+					break;
+				case (4) :
+					//card
+					System.out.println("What is the new Card ID?");
+					int cardID = sc.nextInt();
+					d.updateTransaction(id, option,  cardID);
+					break;
+				default :
+					System.out.println("Invalid input");
+			}
+			d.printResultSet(username);
+		}
+	}
+	
 	public double getTotalForCategories(Scanner sc) {
 		
 		sc.nextLine();
@@ -169,7 +211,7 @@ public class TransactionService {
 		return cashBack;
 	}
 	
-	private static java.util.Date convertIntToDate(int yyyymmdd) {
+	public static java.util.Date convertIntToDate(int yyyymmdd) {
 		Integer rawDate = (Integer) yyyymmdd;
 		String stringDate = rawDate.toString();
 		java.util.Date date = null;

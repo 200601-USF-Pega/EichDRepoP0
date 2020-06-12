@@ -71,6 +71,7 @@ public class TransactionHistoryMenu implements IUserMenu {
 				break;
 			case (9) :
 				// update transaction in records
+				service.updateTransaction(sc);
 				break;
 			case (10) :
 				isMenuActive = false;
