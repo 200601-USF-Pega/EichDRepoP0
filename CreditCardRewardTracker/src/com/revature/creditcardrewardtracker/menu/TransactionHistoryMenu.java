@@ -66,6 +66,13 @@ public class TransactionHistoryMenu implements IUserMenu {
 				System.out.println("Total Cash Back for Date Range is $" + service.getTotalCashBackForDateRange(sc));
 				break;
 			case (8) :
+				// remove transaction from records
+				service.removeTransaction(sc);
+				break;
+			case (9) :
+				// update transaction in records
+				break;
+			case (10) :
 				isMenuActive = false;
 				return;
 			default :
@@ -86,7 +93,9 @@ public class TransactionHistoryMenu implements IUserMenu {
 		System.out.println("[5] Calculate Total Cash Back in a Specific Category");
 		System.out.println("[6] Calculate Total Cash Back on a Specific Credit Card");
 		System.out.println("[7] Calculate Total Cash Back for a Specific Date Range");
-		System.out.println("[8] Return to Main Menu");
+		System.out.println("[8] Remove Transaction from Records");
+		System.out.println("[9] Update Transaction from Records");
+		System.out.println("[10] Return to Main Menu");
 	}
 
 

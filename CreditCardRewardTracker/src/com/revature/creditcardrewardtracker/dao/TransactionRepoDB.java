@@ -3,10 +3,12 @@ package com.revature.creditcardrewardtracker.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import com.revature.creditcardrewardtracker.models.Transaction;
 
@@ -44,11 +46,13 @@ public class TransactionRepoDB implements ITransactionRepo {
 			Statement s = connection.createStatement();
 			ResultSet rs;
 			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
-				+ "LEFT JOIN ("
+				+ "INNER JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
 					+ 	"') AS c ON t.cardid = c.cardid;");
 			
+			//printResultSet(rs);
+
 			transactionList = createTransactionList(rs, transactionList);
 			
 			return transactionList;
@@ -67,14 +71,17 @@ public class TransactionRepoDB implements ITransactionRepo {
 			Statement s = connection.createStatement();
 			ResultSet rs;
 			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
-				+ "LEFT JOIN ("
+				+ "INNER JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
 					+ 	"') AS c ON t.cardid = c.cardid "
 					+	"WHERE category = '" + category + "';");
 			
+			//ResultSet copy = rs;
+			//printResultSet(copy);
+
 			transactionList = createTransactionList(rs, transactionList);
-			
+						
 			return transactionList;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -91,13 +98,15 @@ public class TransactionRepoDB implements ITransactionRepo {
 			Statement s = connection.createStatement();
 			ResultSet rs;
 			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
-				+ "LEFT JOIN ("
+				+ "INNER JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
 					+ 	"') AS c ON t.cardid = c.cardid "
 					+	"WHERE c.cardId = " + cardID + ";");
 			
 			transactionList = createTransactionList(rs, transactionList);
+			
+			//printResultSet(rs);
 			
 			return transactionList;
 		} catch (SQLException e) {
@@ -117,7 +126,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 			Statement s = connection.createStatement();
 			ResultSet rs;
 			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
-				+ "LEFT JOIN ("
+				+ "INNER JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
 					+ 	"') AS c ON t.cardid = c.cardid "
@@ -125,12 +134,52 @@ public class TransactionRepoDB implements ITransactionRepo {
 			
 			transactionList = createTransactionList(rs, transactionList);
 			
+			printResultSet(rs);
+			
 			return transactionList;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@Override
+	public void updateTransaction(String username) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteTransaction(String username, Scanner sc) {
+		
+		try {
+			Statement s = connection.createStatement();
+			ResultSet rs;
+			rs = s.executeQuery("SELECT * FROM transactionrecords as t "
+				+ "INNER JOIN ("
+					+	"SELECT cardid FROM creditcards "
+					+	"WHERE username = '" + username
+					+ 	"') AS c ON t.cardid = c.cardid;");
+			
+			printResultSet(rs);
+			
+			System.out.println("Please input the Transaction ID for the transaction to be deleted.");
+			int option = sc.nextInt();
+			System.out.println("You selected Transaction ID " + option + " to delete. Enter YES to confirm.");
+			if (sc.next().equalsIgnoreCase("YES")) {
+				s.execute("DELETE FROM transactionrecords "
+						+ "WHERE transactionid = " + option +";");
+				System.out.println("Record successfully deleted.");
+			} else {
+				System.out.println("Record will not be deleted.");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	private static java.sql.Date convertUtilToSQLDate(java.util.Date date) {
@@ -161,4 +210,25 @@ public class TransactionRepoDB implements ITransactionRepo {
 		}
 		return null;
 	}
+	
+	private static void printResultSet(ResultSet rs) {
+		
+		try {
+			ResultSetMetaData rsmd = rs.getMetaData();
+			   System.out.println("Printing out transactions");
+			   int columnsNumber = rsmd.getColumnCount();
+			   while (rs.next()) {
+			       for (int i = 1; i <= columnsNumber; i++) {
+			           if (i > 1) System.out.print(",  ");
+			           String columnValue = rs.getString(i);
+			           System.out.print(columnValue + " " + rsmd.getColumnName(i));
+			       }
+			       System.out.println("");
+			   }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	
 }

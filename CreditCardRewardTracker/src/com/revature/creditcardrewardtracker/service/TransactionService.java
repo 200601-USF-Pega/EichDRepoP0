@@ -132,6 +132,10 @@ public class TransactionService {
 		return calculateTotalCashBackFromList(list);
 	}
 	
+	public void removeTransaction(Scanner sc) {
+		d.deleteTransaction(username, sc);
+	}
+	
 	private double calculateCashBack(Transaction transaction) {
 		int card = transaction.getCardID();
 		double rate = 0.0;
