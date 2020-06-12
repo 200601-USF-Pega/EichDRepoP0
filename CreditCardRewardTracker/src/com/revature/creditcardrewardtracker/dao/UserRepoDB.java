@@ -146,4 +146,18 @@ public class UserRepoDB implements IUserRepo {
 		System.out.println("User not found. Please try again.");
 		return false;
 	}
+
+	@Override
+	public boolean deleteUser(String username) {
+		try {
+			Statement s = connection.createStatement();
+			s.execute("DELETE FROM users WHERE username = '" + username + "';");
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("User not found. Please try again.");
+		return false;
+	}
 }

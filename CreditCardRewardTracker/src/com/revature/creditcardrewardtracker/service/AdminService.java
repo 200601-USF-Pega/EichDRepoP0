@@ -38,6 +38,23 @@ public class AdminService {
 		}
 	}
 	
+	public void deleteUserAccount() {
+		System.out.println("Please enter the username associated with the account to be delted.");
+		String username = sc.next();
+		
+		boolean result = false;
+		System.out.println("Enter YES to verify account deletion for " + username);
+		if (sc.next().equalsIgnoreCase("yes")) {
+			result = d.deleteUser(username);
+		}
+		
+		if (result == true ) {
+			System.out.println(username + "'s account deleted.");
+		} else {
+			System.out.println(username + "'s account not deleted.");
+		}
+	}
+	
 	public void promoteUserAccount() {
 		System.out.println("Please enter the username associated with the account to be promoted to admin.");
 		String username = sc.next();

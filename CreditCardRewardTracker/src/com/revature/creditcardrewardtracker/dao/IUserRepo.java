@@ -8,6 +8,8 @@ public interface IUserRepo {
 	
 	public User addUser(User newUser);
 	
+	public boolean deleteUser(String username);
+	
 	public String checkUser(String username, String password);
 	
 	public boolean checkAdmin(String username);

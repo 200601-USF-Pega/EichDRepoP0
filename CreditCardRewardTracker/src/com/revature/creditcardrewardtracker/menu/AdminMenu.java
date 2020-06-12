@@ -35,13 +35,17 @@ public class AdminMenu implements IUserMenu {
 				adminServ.demoteUserAccount();
 				break;
 			case (4) :
+				//delete user account
+				adminServ.deleteUserAccount();
+				break;
+			case (5) :
 				//sign out
 				isMenuActive = false;
 				LogInMenu logInMenu = new LogInMenu();
 				logInMenu.menu(sc, connection);
 				break;
 			default :
-				System.out.println("Invalid entry. Please enter between 0 and 4 to select menu option.");
+				System.out.println("Invalid entry. Please enter between 0 and 5 to select menu option.");
 				listMenuOptions();
 			}
 			option = sc.nextInt();
@@ -56,7 +60,8 @@ public class AdminMenu implements IUserMenu {
 		System.out.println("[1] Reset user password");
 		System.out.println("[2] Promote user to admin");
 		System.out.println("[3] Demote admin to user");
-		System.out.println("[4] Sign out");
+		System.out.println("[4] Delete user account");
+		System.out.println("[5] Sign out");
 	}
 
 }
