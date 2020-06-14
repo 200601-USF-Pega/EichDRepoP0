@@ -2,7 +2,6 @@ package com.revature.creditcardrewardtracker.models;
 
 import java.util.List;
 
-import com.revature.creditcardrewardtracker.exceptions.InvalidCreditCardNumberException;
 import com.revature.creditcardrewardtracker.exceptions.InvalidNameException;
 
 public class CreditCard  {
@@ -27,8 +26,6 @@ public class CreditCard  {
 	}
 
 	public void setCreditCardName(String creditCardName) {
-		//technically should check database for no other matching ID, 
-		//but I don't think it would break it
 		char[] chars = creditCardName.toCharArray();
 		for (char c : chars) {
 			if(Character.isDigit(c)) {

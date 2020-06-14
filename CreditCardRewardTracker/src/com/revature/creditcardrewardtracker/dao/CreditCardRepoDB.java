@@ -37,11 +37,10 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 			card.setCreditCardID(cardid);
 			
 			for (CategoryCashBack category : card.getCardCashBackCategories()) {
-				String query2 = "INSERT INTO creditcardrewards(cardid, category, percentageofcashback) VALUES (?, ?, ?)";
-				PreparedStatement categoryStatement = connection.prepareStatement(query2);
-				categoryStatement.setInt(1,  cardid);
-				categoryStatement.setString(2,  category.getCategoryOfCashBack());
-				categoryStatement.setDouble(3,  category.getPercentageOfCashBack());
+				Statement categoryStatement = connection.createStatement();
+				categoryStatement.executeUpdate("INSERT INTO creditcardrewards(cardid, category, percentageofcashback) "
+						+ "VALUES ('" + card.getCreditCardID() + "', '"
+						+ category.getCategoryOfCashBack() + "', '" + category.getPercentageOfCashBack() + "');");
 			}
 			
 			return card;
