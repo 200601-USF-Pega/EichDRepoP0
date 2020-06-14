@@ -11,7 +11,7 @@ public class CreditCardMenu implements IUserMenu {
 	public void menu(Scanner sc, String username, Connection connection) {
 		
 		listMenuOptions();
-		CreditCardService cardService = new CreditCardService(username, connection);
+		CreditCardService cardService = new CreditCardService(username, connection, sc);
 		
 		int menuOption = sc.nextInt();
 		
@@ -21,15 +21,17 @@ public class CreditCardMenu implements IUserMenu {
 			switch (menuOption) {
 			case (0) :
 				//Add a new credit card
-				cardService.createNewCreditCard(sc);
+				cardService.createNewCreditCard();
 				listMenuOptions();
 				break;
 			case (1) :
 				//Remove a credit card on file
+				cardService.deleteCreditCard();
 				listMenuOptions();
 				break;
 			case (2) :
-				//Update a credit card on file
+				//Update a credit card name on file
+				cardService.updateCardName();
 				listMenuOptions();
 				break;
 			case (3) :
@@ -69,7 +71,7 @@ public class CreditCardMenu implements IUserMenu {
 		System.out.println("CREDIT CARD MENU");
 		System.out.println("[0] Add a new credit card");
 		System.out.println("[1] Remove a credit card on file");
-		System.out.println("[2] Update a credit card on file");
+		System.out.println("[2] Update the name of a credit card on file");
 		System.out.println("[3] Add a cash back category to a credit card");
 		System.out.println("[4] Remove a cash back category from a credit card");
 		System.out.println("[5] Update a cash back category");

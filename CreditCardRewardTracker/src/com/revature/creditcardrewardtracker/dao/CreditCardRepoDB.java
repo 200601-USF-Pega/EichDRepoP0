@@ -91,5 +91,33 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 		}
 		return null;
 	}
+	
+	@Override
+	public boolean deleteCard(int cardId) {
+		try {
+			Statement s = connection.createStatement();
+			s.execute("DELETE FROM creditcards WHERE cardid = '" + cardId + "';");
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("Card not found. Please try again.");
+		return false;
+	}
+	
+	@Override
+	public boolean updateCard(int cardId, String name) {
+		try {	
+			Statement s = connection.createStatement();
+			s.executeUpdate("UPDATE creditcards AS c " +
+					"SET cardname = " + name + " WHERE c.cardId = " + cardId + ";");
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 
 }
