@@ -111,9 +111,10 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 		try {	
 			Statement s = connection.createStatement();
 			s.executeUpdate("UPDATE creditcards AS c " +
-					"SET cardname = " + name + " WHERE c.cardId = " + cardId + ";");
+					"SET cardname = '" + name + "' WHERE c.cardId = " + cardId + ";");
 			return true;
 		} catch (SQLException e) {
+			e.getMessage();
 			e.printStackTrace();
 		}
 		return false;

@@ -93,7 +93,12 @@ public class CreditCardService {
 		System.out.println("What would you like to rename this card?");
 		String newName = sc.nextLine();
 		
-		d.updateCard(id, newName);
+		boolean result = d.updateCard(id, newName);
+		if (result == true) {
+			System.out.println(id + " updated successfully.");
+		} else {
+			System.out.println(id + " not updated.");
+		} 
 		
 	}
 
