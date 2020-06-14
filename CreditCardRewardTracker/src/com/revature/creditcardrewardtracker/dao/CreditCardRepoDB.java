@@ -25,17 +25,23 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 		//2. add creditcardcategories to creditcardrewards table
 	
 		try {
-			PreparedStatement creditCardStatement = connection.prepareStatement("INSERT INTO creditcards VALUES (?, ?, ?)");
-			creditCardStatement.setInt(1,  card.getCreditCardID());
-			creditCardStatement.setString(2,  card.getCreditCardName());
-			creditCardStatement.setString(3,  username);
+			String query1 = "INSERT INTO creditcards (cardname, username) VALUES (?, ?)";
+			PreparedStatement creditCardStatement = connection.prepareStatement(query1, PreparedStatement.RETURN_GENERATED_KEYS);
+			//creditCardStatement.setInt(1,  card.getCreditCardID());
+			creditCardStatement.setString(1,  card.getCreditCardName());
+			creditCardStatement.setString(2,  username);
 			creditCardStatement.executeUpdate();
 			
+			ResultSet rs = creditCardStatement.getGeneratedKeys();
+			int cardid = rs.next() ? rs.getInt(1) : 0;
+			card.setCreditCardID(cardid);
+			
 			for (CategoryCashBack category : card.getCardCashBackCategories()) {
-				Statement categoryStatement = connection.createStatement();
-				categoryStatement.executeUpdate("INSERT INTO creditcardrewards(cardid, category, percentageofcashback) "
-						+ "VALUES ('" + card.getCreditCardID() + "', '"
-						+ category.getCategoryOfCashBack() + "', '" + category.getPercentageOfCashBack() + "');");
+				String query2 = "INSERT INTO creditcardrewards(cardid, category, percentageofcashback) VALUES (?, ?, ?)";
+				PreparedStatement categoryStatement = connection.prepareStatement(query2);
+				categoryStatement.setInt(1,  cardid);
+				categoryStatement.setString(2,  category.getCategoryOfCashBack());
+				categoryStatement.setDouble(3,  category.getPercentageOfCashBack());
 			}
 			
 			return card;

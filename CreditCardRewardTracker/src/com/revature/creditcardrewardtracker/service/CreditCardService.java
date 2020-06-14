@@ -1,7 +1,6 @@
 package com.revature.creditcardrewardtracker.service;
 
 import java.sql.Connection;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,9 +32,9 @@ public class CreditCardService {
 			String creditCardName = input.nextLine();
 			card.setCreditCardName(creditCardName);
 			
-			System.out.println("What are the last 4 digits of the credit card?");
+			/*System.out.println("What are the last 4 digits of the credit card?");
 			int cardID = Integer.parseInt(input.nextLine());
-			card.setCreditCardID(cardID);
+			card.setCreditCardID(cardID);*/
 			
 			card.setCardCashBackCategories(cashback.createNewCashbackCategory(input));
 			

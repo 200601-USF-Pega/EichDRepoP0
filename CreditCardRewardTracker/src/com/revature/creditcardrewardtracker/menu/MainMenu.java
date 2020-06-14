@@ -38,7 +38,7 @@ public class MainMenu implements IUserMenu {
 				//add credit card, reward categories, and % back
 				System.out.println("Launching database to add a new credit card");
 				CreditCardService cardService = new CreditCardService(username, connection);
-				System.out.println(cardService.createNewCreditCard(sc).toString());
+				cardService.createNewCreditCard(sc);
 				listMenuOptions();
 				break;
 			case (2) :

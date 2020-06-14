@@ -43,11 +43,7 @@ public class CreditCard  {
 	}
 
 	public void setCreditCardID(int creditCardID) {
-		//needs to check the database that no other card has same ID
-		Integer id = (Integer) creditCardID;
-		if (id.toString().length() != 4) {
-			throw new InvalidCreditCardNumberException();
-		}
+		//needs to check the database that no other card has same ID}
 		this.creditCardID = creditCardID;
 	}
 
