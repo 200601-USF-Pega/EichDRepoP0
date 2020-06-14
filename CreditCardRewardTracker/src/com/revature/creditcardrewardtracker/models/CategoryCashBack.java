@@ -32,8 +32,8 @@ public class CategoryCashBack {
 
 	@Override
 	public String toString() {
-		return '\n' + "[categoryOfCashBack=" + categoryOfCashBack + ", percentageOfCashBack="
-				+ percentageOfCashBack + "]";
+		return '\n' + "Category = " + categoryOfCashBack + ", Cash Back Rate = "
+				+ percentageOfCashBack;
 	}
 
 }

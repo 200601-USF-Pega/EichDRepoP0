@@ -51,14 +51,18 @@ public class CalculatorService {
 	public void calculatePercentageBack(Scanner sc) {
 		
 		sc.nextLine();
-		System.out.println("What are the last 4 digits of the card you plan on using?");
+		System.out.println("Which of the following cards do you plan on using? Please enter the Card ID.");
+		for (CreditCard c : cards) {
+			System.out.println(c.stringNameAndId());
+		}
 		int cardNumber = sc.nextInt();
 		
 		for (int i = 0; cards.size() > i; i++) {
 			CreditCard tempCard = cards.get(i);
 			if (tempCard.getCreditCardID() == cardNumber) {
+				sc.nextLine();
 				System.out.println("What is the category of the purchase?");
-				String category = sc.next();
+				String category = sc.nextLine();
 				
 				double bestRate = 0.00;
 				for (int j = 0; tempCard.getCardCashBackCategories().size() > j; j++) {

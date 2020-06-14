@@ -54,8 +54,11 @@ public class CreditCard  {
 
 	@Override
 	public String toString() {
-		return "CreditCard [creditCardName=" + creditCardName + ", creditCardID=" +  creditCardID
-				+ ", cardCashBackCategories=" + cardCashBackCategories + "]";
+		return '\n' + creditCardName + ", Card ID = " +  creditCardID + cardCashBackCategories;
+	}
+	
+	public String stringNameAndId() {
+		return creditCardName + " - Card ID: " + creditCardID;
 	}
 
 }
