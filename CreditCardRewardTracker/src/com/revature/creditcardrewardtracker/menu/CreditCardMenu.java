@@ -3,6 +3,7 @@ package com.revature.creditcardrewardtracker.menu;
 import java.sql.Connection;
 import java.util.Scanner;
 
+import com.revature.creditcardrewardtracker.service.CashbackCategoryService;
 import com.revature.creditcardrewardtracker.service.CreditCardService;
 
 public class CreditCardMenu implements IUserMenu {
@@ -12,6 +13,7 @@ public class CreditCardMenu implements IUserMenu {
 		
 		listMenuOptions();
 		CreditCardService cardService = new CreditCardService(username, connection, sc);
+		CashbackCategoryService categoryService = new CashbackCategoryService(username, connection, sc);
 		
 		int menuOption = sc.nextInt();
 		
@@ -36,6 +38,7 @@ public class CreditCardMenu implements IUserMenu {
 				break;
 			case (3) :
 				//Add a cash back category to a credit card
+				categoryService.addCashbackCategory();
 				listMenuOptions();
 				break;
 			case (4) :

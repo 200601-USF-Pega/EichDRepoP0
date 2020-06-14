@@ -24,7 +24,7 @@ public class CreditCardService {
 	
 	public CreditCard createNewCreditCard() {
 		
-		CashbackCategoryService cashback = new CashbackCategoryService();
+		CashbackCategoryService cashback = new CashbackCategoryService(username, connection, sc);
 		
 		CreditCard card = new CreditCard();
 		
@@ -38,7 +38,7 @@ public class CreditCardService {
 			int cardID = Integer.parseInt(input.nextLine());
 			card.setCreditCardID(cardID);*/
 			
-			card.setCardCashBackCategories(cashback.createNewCashbackCategory(sc));
+			card.setCardCashBackCategories(cashback.createNewCashbackCategory());
 			
 			card = d.addCreditCard(username, card);
 			

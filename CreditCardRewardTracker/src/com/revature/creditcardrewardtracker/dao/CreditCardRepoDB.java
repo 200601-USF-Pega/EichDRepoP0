@@ -36,11 +36,9 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 			int cardid = rs.next() ? rs.getInt(1) : 0;
 			card.setCreditCardID(cardid);
 			
+			ICreditCardRewardsRepo ccrr = new CreditCardRewardsRepoDB(connection);
 			for (CategoryCashBack category : card.getCardCashBackCategories()) {
-				Statement categoryStatement = connection.createStatement();
-				categoryStatement.executeUpdate("INSERT INTO creditcardrewards(cardid, category, percentageofcashback) "
-						+ "VALUES ('" + card.getCreditCardID() + "', '"
-						+ category.getCategoryOfCashBack() + "', '" + category.getPercentageOfCashBack() + "');");
+				ccrr.addCashBackCategory(cardid, category.getCategoryOfCashBack(), category.getPercentageOfCashBack());
 			}
 			
 			return card;
