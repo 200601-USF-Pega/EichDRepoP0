@@ -4,7 +4,7 @@ public interface ICreditCardRewardsRepo {
 
 	public boolean addCashBackCategory(int cardId, String category, double percentageback);
 	
-	public boolean removeCashBackCategory(int categoryId);
+	public boolean deleteCashBackCategory(int categoryId);
 	
 	public boolean updateCashBackCategory(int categoryId, int option, Object obj);
 }

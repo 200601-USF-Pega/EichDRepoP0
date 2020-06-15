@@ -19,14 +19,16 @@ public class TransactionService {
 	ITransactionRepo d;
 	String username;
 	Connection connection;
+	Scanner sc;
 	
-	public TransactionService(String username, Connection connection) {
+	public TransactionService(String username, Connection connection, Scanner sc) {
 		d = new TransactionRepoDB(connection);
 		this.connection = connection;
 		this.username = username;
+		this.sc = sc;
 	}
 	
-	public Transaction recordNewTransaction(Scanner sc) {
+	public Transaction recordNewTransaction() {
 		
 		Transaction transaction = new Transaction();
 		
@@ -60,7 +62,7 @@ public class TransactionService {
 		return list;
 	}
 	
-	public void updateTransaction(Scanner sc) {
+	public void updateTransaction() {
 		d.printResultSet(username);
 		System.out.println("Please input the Transaction ID for the transaction to be updated.");
 		int id = sc.nextInt();
@@ -102,7 +104,7 @@ public class TransactionService {
 		}
 	}
 	
-	public double getTotalForCategories(Scanner sc) {
+	public double getTotalForCategories() {
 		
 		sc.nextLine();
 		System.out.println("What category would like you pull records from?");
@@ -112,7 +114,7 @@ public class TransactionService {
 		return calculateTotalFromList(list);
 	}
 	
-	public double getTotalForCard(Scanner sc) {
+	public double getTotalForCard() {
 		
 		sc.nextLine();
 		System.out.println("What credit card would like you pull records from? Please provide the last 4 digits of the card.");
@@ -122,7 +124,7 @@ public class TransactionService {
 		return calculateTotalFromList(list);	
 	}
 	
-	public double getTotalForDateRange(Scanner sc) {
+	public double getTotalForDateRange() {
 		
 		sc.nextLine();
 		System.out.println("What is the start date for your date range? Please use YYYYMMDD format.");
@@ -140,7 +142,7 @@ public class TransactionService {
 		return calculateTotalCashBackFromList(list);
 	}
 	
-	public double getTotalCashBackForCategories(Scanner sc) {
+	public double getTotalCashBackForCategories() {
 		
 		sc.nextLine();
 		System.out.println("What category would like you pull records from?");
@@ -150,7 +152,7 @@ public class TransactionService {
 		return calculateTotalCashBackFromList(list);
 	}
 	
-	public double getTotalCashBackForCard(Scanner sc) {
+	public double getTotalCashBackForCard() {
 		
 		sc.nextLine();
 		System.out.println("What credit card would like you pull records from? Please provide the last 4 digits of the card.");
@@ -161,7 +163,7 @@ public class TransactionService {
 	}
 	
 	
-	public double getTotalCashBackForDateRange(Scanner sc) {
+	public double getTotalCashBackForDateRange() {
 		
 		sc.nextLine();
 		System.out.println("What is the start date for your date range? Please use YYYYMMDD format.");
@@ -174,8 +176,17 @@ public class TransactionService {
 		return calculateTotalCashBackFromList(list);
 	}
 	
-	public void removeTransaction(Scanner sc) {
-		d.deleteTransaction(username, sc);
+	public void removeTransaction() {
+		d.listTransactions(username);
+		
+		System.out.println("Please input the Transaction ID for the transaction to be deleted.");
+		int option = sc.nextInt();
+		System.out.println("You selected Transaction ID " + option + " to delete. Enter YES to confirm.");
+		if (sc.next().equalsIgnoreCase("YES")) {
+			d.deleteTransaction(option);
+		} else {
+			System.out.println("Transaction will not be removed.");
+		}
 	}
 	
 	private double calculateCashBack(Transaction transaction) {

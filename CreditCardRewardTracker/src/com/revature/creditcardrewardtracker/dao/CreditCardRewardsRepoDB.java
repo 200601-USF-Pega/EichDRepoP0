@@ -3,6 +3,7 @@ package com.revature.creditcardrewardtracker.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 	
@@ -15,7 +16,8 @@ public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 	@Override
 	public boolean addCashBackCategory(int cardId, String category, double percentageback) {
 		try {
-			PreparedStatement categoryStatement = connection.prepareStatement("INSERT INTO creditcardrewards(cardid, category, percentageofcashback) VALUES (?, ?, ?)");
+			String query = "INSERT INTO creditcardrewards(cardid, category, percentageofcashback) VALUES (?, ?, ?)";
+			PreparedStatement categoryStatement = connection.prepareStatement(query);
 			categoryStatement.setInt(1, cardId);
 			categoryStatement.setString(2, category);
 			categoryStatement.setDouble(3,  percentageback);
@@ -28,8 +30,15 @@ public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 	}
 
 	@Override
-	public boolean removeCashBackCategory(int categoryId) {
-		// TODO Auto-generated method stub
+	public boolean deleteCashBackCategory(int categoryId) {
+		try {
+			String query = "DELETE FROM creditcardrewards WHERE categoryid = ";
+			Statement s = connection.createStatement();
+			s.execute(query + categoryId + ";");
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 

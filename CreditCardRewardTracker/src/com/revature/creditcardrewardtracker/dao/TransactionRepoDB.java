@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import com.revature.creditcardrewardtracker.models.Transaction;
 
@@ -23,7 +22,9 @@ public class TransactionRepoDB implements ITransactionRepo {
 	@Override
 	public void addTransaction(Transaction newTransaction) {
 		try {
-			PreparedStatement s = connection.prepareStatement("INSERT INTO transactionrecords(date, category, transactiontotal, cashbacktotal, cardid) VALUES (?, ?, ?, ?, ?)");
+			PreparedStatement s = connection.prepareStatement("INSERT INTO "
+					+ "transactionrecords(date, category, transactiontotal, "
+					+ "cashbacktotal, cardid) VALUES (?, ?, ?, ?, ?)");
 						
 			s.setDate(1, convertUtilToSQLDate(newTransaction.getDate()));
 			s.setString(2, newTransaction.getCategory());
@@ -205,29 +206,19 @@ public class TransactionRepoDB implements ITransactionRepo {
 	}
 
 	@Override
-	public void deleteTransaction(String username, Scanner sc) {
+	public boolean deleteTransaction(int id) {
 		
 		try {
 			Statement s = connection.createStatement();
-			
-			this.printResultSet(username);
-			
-			System.out.println("Please input the Transaction ID for the transaction to be deleted.");
-			int option = sc.nextInt();
-			System.out.println("You selected Transaction ID " + option + " to delete. Enter YES to confirm.");
-			if (sc.next().equalsIgnoreCase("YES")) {
-				s.execute("DELETE FROM transactionrecords "
-						+ "WHERE transactionid = " + option +";");
-				System.out.println("Record successfully deleted.");
-			} else {
-				System.out.println("Record will not be deleted.");
-			}
-			
+			s.execute("DELETE FROM transactionrecords "
+				+ "WHERE transactionid = " + id +";");
+			return true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+		return false;
 	}
 
 	private static java.sql.Date convertUtilToSQLDate(java.util.Date date) {

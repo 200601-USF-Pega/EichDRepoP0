@@ -27,7 +27,6 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 		try {
 			String query1 = "INSERT INTO creditcards (cardname, username) VALUES (?, ?)";
 			PreparedStatement creditCardStatement = connection.prepareStatement(query1, PreparedStatement.RETURN_GENERATED_KEYS);
-			//creditCardStatement.setInt(1,  card.getCreditCardID());
 			creditCardStatement.setString(1,  card.getCreditCardName());
 			creditCardStatement.setString(2,  username);
 			creditCardStatement.executeUpdate();
