@@ -39,6 +39,7 @@ public class MainMenu implements IUserMenu {
 				System.out.println("Launching database to add a new credit card");
 				CreditCardService cardService = new CreditCardService(username, connection, sc);
 				cardService.createNewCreditCard();
+				listMenuOptions();
 				break;
 			case (2) :
 				//add to transaction history

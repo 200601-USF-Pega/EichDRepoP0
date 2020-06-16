@@ -11,6 +11,12 @@ import java.util.List;
 
 import com.revature.creditcardrewardtracker.models.Transaction;
 
+//Java Util to SQL method adapted from Javin Paul's tutorial found on
+//https://www.java67.com/2014/02/how-to-convert-javautildate-to-javasqldate-example.html#:~:text=Since%20both%20Date%20classes%20are,sql.
+
+//Code for Printing the ResultSet was adapted from code written by lukas on Coderwall.com
+//https://coderwall.com/p/609ppa/printing-the-result-of-resultset
+
 public class TransactionRepoDB implements ITransactionRepo {
 
 	Connection connection;
