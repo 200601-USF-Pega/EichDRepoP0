@@ -3,19 +3,23 @@ package com.revature.creditcardrewardtracker.menu;
 import java.sql.Connection;
 import java.util.Scanner;
 
+import com.revature.creditcardrewardtracker.service.InputValidationService;
 import com.revature.creditcardrewardtracker.service.LogInService;
 import com.revature.creditcardrewardtracker.service.UserService;
 
 public class LogInMenu implements IMenu {
 	
+	
 	public void menu(Scanner sc, Connection connection) {
+		
+		InputValidationService inputValidation = new InputValidationService(sc);
 		
 		System.out.println("Welcome to the Credit Card Reward Calculator and Tracker!");
 		listMenuOptions();
 		
 		//Scanner sc = new Scanner(System.in);
 		
-		int option = sc.nextInt();
+		int option = inputValidation.getValidInt();
 		boolean isMenuActive = true;
 		
 		while (isMenuActive == true) {
@@ -25,10 +29,10 @@ public class LogInMenu implements IMenu {
 				LogInService login = new LogInService(connection, sc);
 	
 				System.out.println("Please enter your username:");
-				String username = sc.next();
+				String username = inputValidation.getValidStringInput();
 				
 				System.out.println("Please enter your password:");
-				String password = sc.next();
+				String password = inputValidation.getValidStringInput();
 				
 				String user = login.logInVerification(username, password);
 				
@@ -61,10 +65,10 @@ public class LogInMenu implements IMenu {
 			default :
 				System.out.println("Please enter 1 to log in or 2 to create a new account.");
 				listMenuOptions();
-				option = sc.nextInt();
+				option = inputValidation.getValidInt();
 				break;
 			}
-			option = sc.nextInt();
+			option = inputValidation.getValidInt();
 		}	
 
 	}

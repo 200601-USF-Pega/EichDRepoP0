@@ -5,17 +5,20 @@ import java.util.Scanner;
 
 import com.revature.creditcardrewardtracker.service.CashbackCategoryService;
 import com.revature.creditcardrewardtracker.service.CreditCardService;
+import com.revature.creditcardrewardtracker.service.InputValidationService;
 
 public class CreditCardMenu implements IUserMenu {
 
 	@Override
 	public void menu(Scanner sc, String username, Connection connection) {
 		
+		InputValidationService inputValidation = new InputValidationService(sc);
+		
 		listMenuOptions();
 		CreditCardService cardService = new CreditCardService(username, connection, sc);
 		CashbackCategoryService categoryService = new CashbackCategoryService(username, connection, sc);
 		
-		int menuOption = sc.nextInt();
+		int menuOption = inputValidation.getValidInt();
 		
 		boolean isMenuActive = true;
 		
@@ -71,7 +74,7 @@ public class CreditCardMenu implements IUserMenu {
 				System.out.println("Please enter a menu option from 0 to 7.");
 				listMenuOptions();
 			}
-			menuOption = sc.nextInt();
+			menuOption = inputValidation.getValidInt();
 		}
 		
 		

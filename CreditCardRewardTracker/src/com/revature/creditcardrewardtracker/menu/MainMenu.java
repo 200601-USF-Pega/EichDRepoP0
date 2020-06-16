@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.util.Scanner;
 
 import com.revature.creditcardrewardtracker.service.CreditCardService;
+import com.revature.creditcardrewardtracker.service.InputValidationService;
 import com.revature.creditcardrewardtracker.service.TransactionService;
 
 public class MainMenu implements IUserMenu {
 	
 	public void menu(Scanner sc, String username, Connection connection) {
+		
+		InputValidationService inputValidation = new InputValidationService(sc);
 		
 		System.out.println("Welcome to the Credit Card Reward Calculator and Tracker!");
 		System.out.println("This console application is designed to help you save money "
@@ -21,7 +24,7 @@ public class MainMenu implements IUserMenu {
 		listMenuOptions();
 		
 		//Scanner sc = new Scanner(System.in);
-		int menuOption = sc.nextInt();
+		int menuOption = inputValidation.getValidInt();
 		
 		boolean isMenuActive = true;
 		
@@ -75,7 +78,7 @@ public class MainMenu implements IUserMenu {
 				listMenuOptions();
 			}
 			
-			menuOption = sc.nextInt();
+			menuOption = inputValidation.getValidInt();
 		}
 		
 	}

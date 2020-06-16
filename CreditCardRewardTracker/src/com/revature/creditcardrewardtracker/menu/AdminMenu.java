@@ -4,14 +4,17 @@ import java.sql.Connection;
 import java.util.Scanner;
 
 import com.revature.creditcardrewardtracker.service.AdminService;
+import com.revature.creditcardrewardtracker.service.InputValidationService;
 
 public class AdminMenu implements IUserMenu {
 
 	@Override
 	public void menu(Scanner sc, String username, Connection connection) {
+		InputValidationService inputValidation = new InputValidationService(sc);
+		
 		listMenuOptions();
 		boolean isMenuActive = true;
-		int option = sc.nextInt();
+		int option = inputValidation.getValidInt();
 		
 		AdminService adminServ = new AdminService(sc, connection);
 		
@@ -53,7 +56,7 @@ public class AdminMenu implements IUserMenu {
 				System.out.println("Invalid entry. Please enter between 0 and 5 to select menu option.");
 				listMenuOptions();
 			}
-			option = sc.nextInt();
+			option = inputValidation.getValidInt();
 		}
 		
 		

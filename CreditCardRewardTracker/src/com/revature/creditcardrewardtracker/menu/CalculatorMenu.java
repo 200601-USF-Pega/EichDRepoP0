@@ -4,17 +4,19 @@ import java.sql.Connection;
 import java.util.Scanner;
 
 import com.revature.creditcardrewardtracker.service.CalculatorService;
+import com.revature.creditcardrewardtracker.service.InputValidationService;
 
 public class CalculatorMenu implements IUserMenu {
 	
 	@Override
 	public void menu(Scanner sc, String username, Connection connection) {
 		
+		InputValidationService inputValidation = new InputValidationService(sc);
+		
 		listMenuOptions();
 		CalculatorService calcServ = new CalculatorService(connection, username, sc);
 		
-		//Scanner sc = new Scanner(System.in);
-		int menuOption = sc.nextInt();
+		int menuOption = inputValidation.getValidInt();
 		
 		boolean isMenuActive = true;
 		
@@ -41,7 +43,7 @@ public class CalculatorMenu implements IUserMenu {
 				System.out.println("Please enter a menu option from 0 to 2.");
 				listMenuOptions();
 			}
-			menuOption = sc.nextInt();
+			menuOption = inputValidation.getValidInt();
 		}
 	}
 	

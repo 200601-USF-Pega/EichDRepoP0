@@ -3,6 +3,7 @@ package com.revature.creditcardrewardtracker.menu;
 import java.sql.Connection;
 import java.util.Scanner;
 
+import com.revature.creditcardrewardtracker.service.InputValidationService;
 import com.revature.creditcardrewardtracker.service.TransactionService;
 
 public class TransactionHistoryMenu implements IUserMenu {
@@ -21,12 +22,13 @@ public class TransactionHistoryMenu implements IUserMenu {
 			- pull total rewards for a certain credit card
 		**/
 		
-		//Scanner sc = new Scanner(System.in);
+		InputValidationService inputValidation = new InputValidationService(sc);
+		
 		listMenuOptions();
 		
 		TransactionService service = new TransactionService(username, connection, sc);
 		
-		int menuOption = sc.nextInt();
+		int menuOption = inputValidation.getValidInt();
 		
 		boolean isMenuActive = true;
 		
@@ -35,22 +37,22 @@ public class TransactionHistoryMenu implements IUserMenu {
 			case (0) :
 				//view all transaction records
 				System.out.println("Pulling All Transaction Records");
-				System.out.println(service.getUserTransactions());
+				service.printUserTransactions();
 				listMenuOptions();
 				break;
 			case (1) :
 				//calc total spent in a certain category
-				System.out.println(service.getTotalForCategories());
+				System.out.println("$" + service.getTotalForCategories());
 				listMenuOptions();
 				break;
 			case (2) :
 				//calc total spent on a specific cc
-				System.out.println(service.getTotalForCard());
+				System.out.println("$" + service.getTotalForCard());
 				listMenuOptions();
 				break;
 			case (3) :
 				//calc total spent for date range
-				System.out.println(service.getTotalForDateRange());
+				System.out.println("$" + service.getTotalForDateRange());
 				listMenuOptions();
 				break;
 			case (4) :
@@ -91,7 +93,7 @@ public class TransactionHistoryMenu implements IUserMenu {
 				System.out.println("Please enter a menu option from 0 to 10.");
 				listMenuOptions();			
 			}
-			menuOption = sc.nextInt();
+			menuOption = inputValidation.getValidInt();
 		}
 	}
 		

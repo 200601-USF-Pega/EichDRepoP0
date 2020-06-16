@@ -80,6 +80,10 @@ public class TransactionService {
 		return list;
 	}
 	
+	public void printUserTransactions() {
+		d.printResultSet(username);
+	}
+	
 	public void updateTransaction() {
 		d.printResultSet(username);
 		System.out.println("Please input the Transaction ID for the transaction to be updated.");
@@ -215,6 +219,7 @@ public class TransactionService {
 		d.listTransactions(username);
 		
 		System.out.println("Please input the Transaction ID for the transaction to be deleted.");
+		d.printResultSet(username);
 		int option = inputValidation.getValidInt();
 		
 		boolean belongsToUser = validation.permissionToModifyTransaction(username, option);

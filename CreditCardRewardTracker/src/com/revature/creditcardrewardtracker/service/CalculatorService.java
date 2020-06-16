@@ -14,7 +14,6 @@ public class CalculatorService {
 	private List<CreditCard> cards;
 	private InputValidationService inputValidation;
 	private ValidationService validation;
-	private Scanner sc;
 	private String username;
 	
 	public CalculatorService(Connection connection, String username, Scanner sc) {
@@ -22,13 +21,11 @@ public class CalculatorService {
 		cards = ccr.getCreditCards(username);
 		inputValidation = new InputValidationService(sc);
 		validation = new ValidationService(connection);
-		this.sc = sc;
 		this.username = username;
 	}
 	
 	public void selectBestCard() {
 		
-		sc.nextLine();
 		System.out.println("Please enter the category of the purchase.");
 		String category = inputValidation.getValidStringInput();
 		
@@ -58,7 +55,6 @@ public class CalculatorService {
 	
 	public void calculatePercentageBack() {
 		
-		sc.nextLine();
 		System.out.println("Which of the following cards do you plan on using? Please enter the Card ID.");
 		for (CreditCard c : cards) {
 			System.out.println(c.stringNameAndId());
