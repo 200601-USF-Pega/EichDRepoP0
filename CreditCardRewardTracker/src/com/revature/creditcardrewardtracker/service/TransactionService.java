@@ -22,14 +22,17 @@ public class TransactionService {
 	private Scanner sc;
 	private ValidationService validation;
 	private ICreditCardRepo ccr;
+	private InputValidationService inputValidation;
 	
 	public TransactionService(String username, Connection connection, Scanner sc) {
 		d = new TransactionRepoDB(connection);
 		//this.connection = connection;
 		this.username = username;
 		this.sc = sc;
-		validation = new ValidationService(connection, sc);
+		validation = new ValidationService(connection);
 		ccr = new CreditCardRepoDB(connection);
+		inputValidation = new InputValidationService(sc);
+		
 	}
 	
 	public Transaction recordNewTransaction() {
@@ -40,26 +43,29 @@ public class TransactionService {
 		
 		System.out.println("What was the Card Id assocaited with the credit card used?");
 		System.out.println(ccr.getCreditCards(username));
-		int cardId = sc.nextInt();
+		//int cardId = sc.nextInt();
+		int cardId = inputValidation.getValidInt();
 		boolean belongsToUser = validation.permissionToModifyCard(username, cardId);
 		
 		if (belongsToUser == true) {
-			transaction.setCardID(sc.nextInt());
+			transaction.setCardID(cardId);
 		} else {
 			return transaction;
 		}
 		
 		System.out.println("When did the transaction occur? Please use the YYYYMMDD format.");
-		int dateInt = sc.nextInt();
+		//int dateInt = sc.nextInt();
+		int dateInt = inputValidation.getValidInt();
 		transaction.setDate(convertIntToDate(dateInt));
 		
-		sc.nextLine();
 		System.out.println("Which category does the purchase fall under?");
 		//will need to print out all the categories in the DB here
 		transaction.setCategory(sc.nextLine().toUpperCase());
 		
 		System.out.println("What was the total for this transaction? Please use 0.00 for the format.");
-		transaction.setTotal(sc.nextDouble());
+		//transaction.setTotal(sc.nextDouble());
+		double total = inputValidation.getValidDouble();
+		transaction.setTotal(total);
 		
 		transaction.setCashBackTotal(this.calculateCashBack(transaction));
 		
@@ -77,18 +83,19 @@ public class TransactionService {
 	public void updateTransaction() {
 		d.printResultSet(username);
 		System.out.println("Please input the Transaction ID for the transaction to be updated.");
-		int id = sc.nextInt();
+		int id = inputValidation.getValidInt();
 		if (validation.permissionToModifyTransaction(username, id) == true) {
 			System.out.println("You selected Transaction ID " + id + " to modify. Enter YES to confirm.");
 			if (sc.next().equalsIgnoreCase("YES")) {
 				System.out.println("What would you like to update?");
 				System.out.println("Enter the option for what you'd like to modify: [1] Date; [2] Category; [3] Transaction Total; [4] CardID");
-				int option = sc.nextInt();
+				int option = inputValidation.getValidInt();
 				switch (option) {
 					case (1) :
 						//date
 						System.out.println("What date would you like to change it to? Please use the YYYYMMDD format.");
-						java.util.Date newDate = convertIntToDate(sc.nextInt());
+						int intDate = inputValidation.getValidDate();
+						java.util.Date newDate = convertIntToDate(intDate);
 						d.updateTransaction(id, option, newDate);
 						break;
 					case (2) :
@@ -101,14 +108,14 @@ public class TransactionService {
 					case (3) :
 						//transaction total
 						System.out.println("What is the new Transaction Total?");
-						double total = sc.nextDouble();
+						double total = inputValidation.getValidDouble();
 						d.updateTransaction(id, option, total);
 						break;
 					case (4) :
 						//card
 						System.out.println("What is the new Card ID?");
 						System.out.println(ccr.getCreditCards(username));
-						int cardID = sc.nextInt();
+						int cardID = inputValidation.getValidInt();
 						boolean belongsToUser = validation.permissionToModifyCard(username, cardID);
 						if (belongsToUser == true) {
 							d.updateTransaction(id, option,  cardID);
@@ -124,9 +131,8 @@ public class TransactionService {
 	
 	public double getTotalForCategories() {
 		
-		sc.nextLine();
 		System.out.println("What category would like you pull records from?");
-		String category = sc.nextLine().toUpperCase();
+		String category = inputValidation.getValidStringInput().toUpperCase();
 		List<Transaction> list = d.listTransactionsForCategory(username, category);
 		
 		if (list.isEmpty()) {
@@ -139,10 +145,9 @@ public class TransactionService {
 	
 	public double getTotalForCard() {
 		
-		sc.nextLine();
 		System.out.println("What credit card would like you pull records from? Please provide the Card Id.");
 		System.out.println(ccr.getCreditCards(username));
-		int card = sc.nextInt();
+		int card = inputValidation.getValidInt();
 		boolean belongsToUser = validation.permissionToModifyCard(username, card);
 		if (belongsToUser == true) {
 			List<Transaction> list = d.listTransactionsForCreditCard(username, card);
@@ -153,11 +158,10 @@ public class TransactionService {
 	
 	public double getTotalForDateRange() {
 		
-		sc.nextLine();
 		System.out.println("What is the start date for your date range? Please use YYYYMMDD format.");
-		int date1 = sc.nextInt();
+		int date1 = inputValidation.getValidDate();
 		System.out.println("What is the end date for your date range? Please use YYYYMMDD format.");
-		int date2 = sc.nextInt();
+		int date2 = inputValidation.getValidDate();
 		
 		List<Transaction> list = d.listTransactionsForDateRange(username, convertIntToDate(date1), convertIntToDate(date2));
 		
@@ -171,9 +175,8 @@ public class TransactionService {
 	
 	public double getTotalCashBackForCategories() {
 		
-		sc.nextLine();
 		System.out.println("What category would like you pull records from?");
-		String category = sc.nextLine().toUpperCase();
+		String category = inputValidation.getValidStringInput().toUpperCase();
 		List<Transaction> list = d.listTransactionsForCategory(username, category);
 		
 		return calculateTotalCashBackFromList(list);
@@ -181,11 +184,10 @@ public class TransactionService {
 	
 	public double getTotalCashBackForCard() {
 		
-		sc.nextLine();
 		System.out.println("What credit card would like you pull records from? Please provide the Card Id.");
 		System.out.println(ccr.getCreditCards(username));
 		
-		int card = sc.nextInt();
+		int card = inputValidation.getValidInt();
 		
 		boolean belongsToUser = validation.permissionToModifyCard(username, card);
 		
@@ -199,11 +201,10 @@ public class TransactionService {
 	
 	public double getTotalCashBackForDateRange() {
 		
-		sc.nextLine();
 		System.out.println("What is the start date for your date range? Please use YYYYMMDD format.");
-		int date1 = sc.nextInt();
+		int date1 = inputValidation.getValidDate();
 		System.out.println("What is the end date for your date range? Please use YYYYMMDD format.");
-		int date2 = sc.nextInt();
+		int date2 = inputValidation.getValidDate();
 		
 		List<Transaction> list = d.listTransactionsForDateRange(username, convertIntToDate(date1), convertIntToDate(date2));
 		
@@ -214,7 +215,7 @@ public class TransactionService {
 		d.listTransactions(username);
 		
 		System.out.println("Please input the Transaction ID for the transaction to be deleted.");
-		int option = sc.nextInt();
+		int option = inputValidation.getValidInt();
 		
 		boolean belongsToUser = validation.permissionToModifyTransaction(username, option);
 		

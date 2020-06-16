@@ -11,7 +11,7 @@ public class CalculatorMenu implements IUserMenu {
 	public void menu(Scanner sc, String username, Connection connection) {
 		
 		listMenuOptions();
-		CalculatorService calcServ = new CalculatorService(connection, username);
+		CalculatorService calcServ = new CalculatorService(connection, username, sc);
 		
 		//Scanner sc = new Scanner(System.in);
 		int menuOption = sc.nextInt();
@@ -23,13 +23,13 @@ public class CalculatorMenu implements IUserMenu {
 			case (0) :
 				//launches credit card picking tool
 				System.out.println("Launching Card Picker");
-				calcServ.selectBestCard(sc);
+				calcServ.selectBestCard();
 				listMenuOptions();
 				break;
 			case (1) :
 				//launches cash back calculator
 				System.out.println("Launching Cash Back Calculator");
-				calcServ.calculatePercentageBack(sc);
+				calcServ.calculatePercentageBack();
 				listMenuOptions();
 				break;
 			case (2) :

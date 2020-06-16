@@ -2,7 +2,6 @@ package com.revature.creditcardrewardtracker.service;
 
 import java.sql.Connection;
 import java.util.List;
-import java.util.Scanner;
 
 import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
 import com.revature.creditcardrewardtracker.dao.ICreditCardRepo;
@@ -13,17 +12,13 @@ import com.revature.creditcardrewardtracker.dao.UserRepoDB;
 import com.revature.creditcardrewardtracker.models.CreditCard;
 import com.revature.creditcardrewardtracker.models.Transaction;
 
-//input validation adapted from the amazing Marielle Nolasco's Tour of Heroes Application from
-//https://github.com/200601-USF-Pega/trainer-code/tree/master/Week1Java/TourOfHeros/TourOfHeros
 
 public class ValidationService {
 
 	private Connection connection;
-	private Scanner sc;
 	
-	public ValidationService(Connection connection, Scanner sc) {
+	public ValidationService(Connection connection) {
 		this.connection = connection;
-		this.sc = sc;
 	}
 	
 	

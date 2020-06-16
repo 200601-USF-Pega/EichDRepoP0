@@ -14,18 +14,18 @@ import com.revature.creditcardrewardtracker.models.CreditCard;
 
 public class CashbackCategoryService {
 	
-	private Scanner sc;
 	private String username;
 	private ICreditCardRepo d;
 	private ICreditCardRewardsRepo ccrr;
 	private ValidationService validation;
+	private InputValidationService inputValidation;
 
 	public CashbackCategoryService(String username, Connection connection, Scanner sc) {
-		this.sc = sc;
 		this.username = username;
 		ccrr = new CreditCardRewardsRepoDB(connection);
 		d = new CreditCardRepoDB(connection);
-		validation = new ValidationService(connection, sc);
+		validation = new ValidationService(connection);
+		inputValidation = new InputValidationService(sc);
 		
 	}
 	
@@ -43,7 +43,7 @@ public class CashbackCategoryService {
 				CategoryCashBack category = new CategoryCashBack();
 				
 				System.out.println("What is the name of the category?");
-				scanResult = sc.nextLine();
+				scanResult = inputValidation.getValidStringInput();
 				if (scanResult.equalsIgnoreCase("done")) {
 					break;
 				}
@@ -51,8 +51,7 @@ public class CashbackCategoryService {
 				
 				System.out.println("What is the cash back rate?");
 				System.out.println("Please provide the cash back rate in 0.00 format (i.e. 5% would be 0.05).");
-				category.setPercentageOfCashBack(sc.nextDouble());
-				sc.nextLine();
+				category.setPercentageOfCashBack(inputValidation.getValidDouble());
 				
 				categories.add(category);
 				
@@ -70,14 +69,13 @@ public class CashbackCategoryService {
 	public void addCashbackCategory() {
 		int id = this.identifyCreditCard();
 		
-		sc.nextLine();
 		System.out.println("What is the name of the category?");
-		String category = sc.nextLine();
+		String category = inputValidation.getValidStringInput();
 
 		
 		System.out.println("What is the cash back rate?");
 		System.out.println("Please provide the cash back rate in 0.00 format (i.e. 5% would be 0.05).");
-		double percentageback = sc.nextDouble();
+		double percentageback = inputValidation.getValidDouble();
 		
 		boolean result = ccrr.addCashBackCategory(id, category, percentageback);
 		
@@ -94,22 +92,20 @@ public class CashbackCategoryService {
 		
 		System.out.println("Which attribute of this category would you like to modify?");
 		System.out.println("Enter 0 for category or 1 for percentage of cash back.");
-		int option = sc.nextInt();
-		
-		sc.nextLine();
-		
+		int option = inputValidation.getValidInt();
+				
 		Object obj;
 		boolean result = false;
 		
 		switch (option) {
 		case (0) :
 			System.out.println("Please enter the new category name.");
-			obj = sc.nextLine();
+			obj = inputValidation.getValidStringInput();
 			result = ccrr.updateCashBackCategory(category, option, obj);
 			break;
 		case (1) :
 			System.out.println("Please enter the new cash back rate as a decimal. For example, 5% would 0.05.");
-			obj = sc.nextDouble();
+			obj = inputValidation.getValidDouble();
 			result = ccrr.updateCashBackCategory(category, option, obj);
 			break;
 		default :
@@ -150,7 +146,7 @@ public class CashbackCategoryService {
 				System.out.println(c.stringNameAndId());
 			}
 			
-			int id = sc.nextInt();
+			int id = inputValidation.getValidInt();
 			belongsToUser = validation.permissionToModifyCard(username, id);
 			
 			if (belongsToUser == true) {
@@ -166,7 +162,7 @@ public class CashbackCategoryService {
 		System.out.println("Which category would you like to modify? Please enter the Reward Id number.");
 		//System.out.println(ccrr.getCashBackCategories(id));
 		ccrr.printCashBackCategories(id);
-		int categoryId = sc.nextInt();
+		int categoryId = inputValidation.getValidInt();
 		return categoryId;
 	}
 

@@ -8,14 +8,12 @@ import com.revature.creditcardrewardtracker.dao.UserRepoDB;
 
 public class LogInService {
 	
-	private Connection connection;
 	private IUserRepo d;
 	private ValidationService validation;
 	
 	public LogInService(Connection connection, Scanner sc) {
-		this.connection = connection;
 		d = new UserRepoDB(connection);
-		validation = new ValidationService(connection, sc);
+		validation = new ValidationService(connection);
 	}
 	
 	

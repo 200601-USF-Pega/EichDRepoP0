@@ -11,13 +11,13 @@ import com.revature.creditcardrewardtracker.models.User;
 public class UserService {
 	
 	private Connection connection;
-	private Scanner sc;
 	private ValidationService validation;
+	private InputValidationService inputValidation;
 	
 	public UserService(Connection connection, Scanner sc) {
 		this.connection = connection;
-		this.sc = sc;
-		this.validation = new ValidationService(connection, sc);
+		validation = new ValidationService(connection);
+		inputValidation = new InputValidationService(sc);
 	}
 	
 	public String createNewUser() {
@@ -28,7 +28,7 @@ public class UserService {
 		while (hasUsername == false) {
 			System.out.println("Please enter a username.");
 			System.out.println("Usernames must be between 5 and 25 characters and are not case sensitive.");
-			String username = sc.next();
+			String username = inputValidation.getValidStringInput();
 			if (validation.usernameLengthValidation(username) == true) {
 				if (validation.usernameUniqueValidation(username) == true) {
 					user.setUsername(username);
@@ -41,10 +41,10 @@ public class UserService {
 		
 		while (hasPassword == false) {
 			System.out.println("Please enter a password.");
-			String password = sc.next();
+			String password = inputValidation.getValidStringInput();
 			
 			System.out.println("Please re-enter your password.");
-			String passwordVerify = sc.next();
+			String passwordVerify = inputValidation.getValidStringInput();
 			
 			if (password.equals(passwordVerify)) {
 				if(validation.passwordLengthValidation(password) == true) {

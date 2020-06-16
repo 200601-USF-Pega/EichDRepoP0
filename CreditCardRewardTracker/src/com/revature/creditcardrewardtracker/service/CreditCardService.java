@@ -15,13 +15,15 @@ public class CreditCardService {
 	private ICreditCardRepo d;
 	private Scanner sc;
 	private ValidationService validation;
+	private InputValidationService inputValidation;
 	
 	public CreditCardService(String username, Connection connection, Scanner sc) {
 		this.username = username;
 		this.connection = connection;
-		d = new CreditCardRepoDB(connection);
 		this.sc = sc;
-		validation = new ValidationService(connection, sc);
+		d = new CreditCardRepoDB(connection);
+		validation = new ValidationService(connection);
+		inputValidation = new InputValidationService(sc);
 	}
 	
 	public CreditCard createNewCreditCard() {
@@ -31,9 +33,8 @@ public class CreditCardService {
 		CreditCard card = new CreditCard();
 		
 		try {
-			sc.nextLine();
 			System.out.println("What is the name of the credit card?");
-			String creditCardName = sc.nextLine();
+			String creditCardName = inputValidation.getValidStringInput();
 			card.setCreditCardName(creditCardName);
 			
 			/*System.out.println("What are the last 4 digits of the credit card?");
@@ -69,7 +70,7 @@ public class CreditCardService {
 			System.out.println(c.stringNameAndId());
 		}
 		
-		int id = sc.nextInt();
+		int id = inputValidation.getValidInt();
 		
 		boolean belongsToUser = validation.permissionToModifyCard(username, id);
 		
@@ -92,14 +93,13 @@ public class CreditCardService {
 			System.out.println(c.stringNameAndId());
 		}
 		
-		int id = sc.nextInt();	
+		int id = inputValidation.getValidInt();
 		
 		boolean belongsToUser = validation.permissionToModifyCard(username, id);
 		
 		if (belongsToUser == true) {
-			sc.nextLine();
 			System.out.println("What would you like to rename this card?");
-			String newName = sc.nextLine();
+			String newName = inputValidation.getValidStringInput();
 			
 			boolean result = d.updateCard(id, newName);
 			if (result == true) {
