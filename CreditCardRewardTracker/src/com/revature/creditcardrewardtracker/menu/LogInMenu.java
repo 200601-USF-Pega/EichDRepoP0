@@ -22,7 +22,7 @@ public class LogInMenu implements IMenu {
 			switch (option) {
 			//log in
 			case (1) :
-				LogInService login = new LogInService(connection);
+				LogInService login = new LogInService(connection, sc);
 	
 				System.out.println("Please enter your username:");
 				String username = sc.next();
@@ -31,16 +31,17 @@ public class LogInMenu implements IMenu {
 				String password = sc.next();
 				
 				String user = login.logInVerification(username, password);
-				user = user.toLowerCase();
 				
 				if (user == null) {
+					listMenuOptions();
 					break;
+				} else {
+					user = user.toLowerCase();
+					AdminMenuFactory menuFactory = new AdminMenuFactory();
+					IUserMenu menu = menuFactory.getMenu(login.adminVerification(username));
+					menu.menu(sc, user, connection);
+					isMenuActive = false;
 				}
-				
-				AdminMenuFactory menuFactory = new AdminMenuFactory();
-				IUserMenu menu = menuFactory.getMenu(login.adminVerification(username));
-				menu.menu(sc, user, connection);
-				isMenuActive = false;
 				break;
 			// create a new account
 			case (2) :
@@ -63,7 +64,7 @@ public class LogInMenu implements IMenu {
 				option = sc.nextInt();
 				break;
 			}
-			
+			option = sc.nextInt();
 		}	
 
 	}

@@ -48,6 +48,18 @@ public class ValidationService {
 		}
 	}
 	
+	public boolean usernameExistsValidation(String username) {
+		IUserRepo ur = new UserRepoDB(connection);
+		List<String> usernames = ur.getAllUsers();
+		
+		for (String user : usernames) {
+			if (user.equalsIgnoreCase(username)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean passwordLengthValidation(String password) {
 		
 		if(password.length() >= 5 && password.length() <= 25) {
