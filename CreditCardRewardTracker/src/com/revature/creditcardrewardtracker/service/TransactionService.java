@@ -16,18 +16,20 @@ import com.revature.creditcardrewardtracker.models.Transaction;
 
 public class TransactionService {
 	
-	ITransactionRepo d;
-	String username;
-	Connection connection;
-	Scanner sc;
-	ValidationService validation;
+	private ITransactionRepo d;
+	private String username;
+	//private Connection connection;
+	private Scanner sc;
+	private ValidationService validation;
+	private ICreditCardRepo ccr;
 	
 	public TransactionService(String username, Connection connection, Scanner sc) {
 		d = new TransactionRepoDB(connection);
-		this.connection = connection;
+		//this.connection = connection;
 		this.username = username;
 		this.sc = sc;
 		validation = new ValidationService(connection, sc);
+		ccr = new CreditCardRepoDB(connection);
 	}
 	
 	public Transaction recordNewTransaction() {
@@ -36,8 +38,16 @@ public class TransactionService {
 		
 		System.out.println("Preparing entry for Transaction");
 		
-		System.out.println("What are the last 4 digits of the credit card used?");
-		transaction.setCardID(sc.nextInt());
+		System.out.println("What was the Card Id assocaited with the credit card used?");
+		System.out.println(ccr.getCreditCards(username));
+		int cardId = sc.nextInt();
+		boolean belongsToUser = validation.permissionToModifyCard(username, cardId);
+		
+		if (belongsToUser == true) {
+			transaction.setCardID(sc.nextInt());
+		} else {
+			return transaction;
+		}
 		
 		System.out.println("When did the transaction occur? Please use the YYYYMMDD format.");
 		int dateInt = sc.nextInt();
@@ -97,8 +107,12 @@ public class TransactionService {
 					case (4) :
 						//card
 						System.out.println("What is the new Card ID?");
+						System.out.println(ccr.getCreditCards(username));
 						int cardID = sc.nextInt();
-						d.updateTransaction(id, option,  cardID);
+						boolean belongsToUser = validation.permissionToModifyCard(username, cardID);
+						if (belongsToUser == true) {
+							d.updateTransaction(id, option,  cardID);
+						}
 						break;
 					default :
 						System.out.println("Invalid input");
@@ -115,17 +129,26 @@ public class TransactionService {
 		String category = sc.nextLine().toUpperCase();
 		List<Transaction> list = d.listTransactionsForCategory(username, category);
 		
+		if (list.isEmpty()) {
+			System.out.println("Nothing found for that category");
+			return 0;
+		}
+		
 		return calculateTotalFromList(list);
 	}
 	
 	public double getTotalForCard() {
 		
 		sc.nextLine();
-		System.out.println("What credit card would like you pull records from? Please provide the last 4 digits of the card.");
+		System.out.println("What credit card would like you pull records from? Please provide the Card Id.");
+		System.out.println(ccr.getCreditCards(username));
 		int card = sc.nextInt();
-		List<Transaction> list = d.listTransactionsForCreditCard(username, card);
-		
-		return calculateTotalFromList(list);	
+		boolean belongsToUser = validation.permissionToModifyCard(username, card);
+		if (belongsToUser == true) {
+			List<Transaction> list = d.listTransactionsForCreditCard(username, card);
+			return calculateTotalFromList(list);
+		}
+		return 0;
 	}
 	
 	public double getTotalForDateRange() {
@@ -159,11 +182,18 @@ public class TransactionService {
 	public double getTotalCashBackForCard() {
 		
 		sc.nextLine();
-		System.out.println("What credit card would like you pull records from? Please provide the last 4 digits of the card.");
-		int card = sc.nextInt();
-		List<Transaction> list = d.listTransactionsForCreditCard(username, card);
+		System.out.println("What credit card would like you pull records from? Please provide the Card Id.");
+		System.out.println(ccr.getCreditCards(username));
 		
-		return calculateTotalCashBackFromList(list);	
+		int card = sc.nextInt();
+		
+		boolean belongsToUser = validation.permissionToModifyCard(username, card);
+		
+		if (belongsToUser == true) {
+			List<Transaction> list = d.listTransactionsForCreditCard(username, card);
+			return calculateTotalCashBackFromList(list);	
+		}
+		return 0;
 	}
 	
 	
@@ -185,11 +215,16 @@ public class TransactionService {
 		
 		System.out.println("Please input the Transaction ID for the transaction to be deleted.");
 		int option = sc.nextInt();
-		System.out.println("You selected Transaction ID " + option + " to delete. Enter YES to confirm.");
-		if (sc.next().equalsIgnoreCase("YES")) {
-			d.deleteTransaction(option);
-		} else {
-			System.out.println("Transaction will not be removed.");
+		
+		boolean belongsToUser = validation.permissionToModifyTransaction(username, option);
+		
+		if (belongsToUser == true) {
+			System.out.println("You selected Transaction ID " + option + " to delete. Enter YES to confirm.");
+			if (sc.next().equalsIgnoreCase("YES")) {
+				d.deleteTransaction(option);
+			} else {
+				System.out.println("Transaction will not be removed.");
+			}
 		}
 	}
 	
@@ -200,7 +235,6 @@ public class TransactionService {
 		
 		double cashBack;
 		
-		ICreditCardRepo ccr = new CreditCardRepoDB(connection);
 		List<CreditCard> cardsOnFile = ccr.getCreditCards(username);
 		
 		for (CreditCard cc : cardsOnFile) {
@@ -226,7 +260,7 @@ public class TransactionService {
 		return cashBack;
 	}
 	
-	public static java.util.Date convertIntToDate(int yyyymmdd) {
+	private static java.util.Date convertIntToDate(int yyyymmdd) {
 		Integer rawDate = (Integer) yyyymmdd;
 		String stringDate = rawDate.toString();
 		java.util.Date date = null;
