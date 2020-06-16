@@ -8,15 +8,6 @@ import com.revature.creditcardrewardtracker.menu.LogInMenu;
 public class Driver {
 
 	public static void main(String[] args) {
-
-		//MainMenu menu = new MainMenu();
-		//menu.menu();
-		
-		//CashbackCategoryService category = new CashbackCategoryService();
-		//category.createNewCashbackCategory();
-		
-		//CreditCardService service = new CreditCardService();
-		//service.createNewCreditCard();
 		
 		Scanner sc = new Scanner(System.in);
 		ConnectionManager connect = new ConnectionManager();

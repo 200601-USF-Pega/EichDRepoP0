@@ -10,33 +10,60 @@ import com.revature.creditcardrewardtracker.models.User;
 
 public class UserService {
 	
-	public String createNewUser(Scanner sc, Connection connection) {
+	private Connection connection;
+	private Scanner sc;
+	private ValidationService validation;
+	
+	public UserService(Connection connection, Scanner sc) {
+		this.connection = connection;
+		this.sc = sc;
+		this.validation = new ValidationService(connection, sc);
+	}
+	
+	public String createNewUser() {
 		User user = new User();
 		
+		boolean hasUsername = false;
 		
-		System.out.println("Please enter a username.");
-		user.setUsername(sc.next());
+		while (hasUsername == false) {
+			System.out.println("Please enter a username.");
+			System.out.println("Usernames must be between 5 and 25 characters and are not case sensitive.");
+			String username = sc.next();
+			if (validation.usernameLengthValidation(username) == true) {
+				if (validation.usernameUniqueValidation(username) == true) {
+					user.setUsername(username);
+					hasUsername = true;
+				}
+			}
+		}
 		
-		System.out.println("Please enter a password.");
-		String password = sc.next();
+		boolean hasPassword = false;
 		
-		System.out.println("Please re-enter your password.");
-		String passwordVerify = sc.next();
-		
-		user.setAdmin(false);
-		
-		if (password.equals(passwordVerify)) {
-			user.setPassword(password);
+		while (hasPassword == false) {
+			System.out.println("Please enter a password.");
+			String password = sc.next();
 			
+			System.out.println("Please re-enter your password.");
+			String passwordVerify = sc.next();
+			
+			if (password.equals(passwordVerify)) {
+				if(validation.passwordLengthValidation(password) == true) {
+					hasPassword = true;
+					user.setPassword(password);
+				}
+			} else {
+				System.out.println("Passwords do not match.");
+			}
+		}
+		
+			user.setAdmin(false);
+
 			IUserRepo d = new UserRepoDB(connection);
 			user = d.addUser(user);
 			
-			System.out.println("User successfully created.");
+			System.out.println("User " + user.getUsername() + " successfully created.");
 			return user.getUsername();
-		} else {
-			System.out.println("Passwords do not match. Exiting.");
-			return null;
-		}
+		
 	}
 	
 	public void addCardToUser(User user, CreditCard card) {

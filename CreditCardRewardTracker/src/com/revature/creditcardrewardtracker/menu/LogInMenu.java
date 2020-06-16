@@ -44,8 +44,8 @@ public class LogInMenu implements IMenu {
 				break;
 			// create a new account
 			case (2) :
-				UserService creation = new UserService();
-				String newUsername = creation.createNewUser(sc, connection);
+				UserService creation = new UserService(connection, sc);
+				String newUsername = creation.createNewUser();
 				MainMenu newUserMenu = new MainMenu();
 				newUsername = newUsername.toLowerCase();
 				newUserMenu.menu(sc, newUsername, connection);
