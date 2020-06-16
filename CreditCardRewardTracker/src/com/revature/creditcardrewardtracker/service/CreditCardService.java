@@ -10,16 +10,18 @@ import com.revature.creditcardrewardtracker.models.CreditCard;
 
 public class CreditCardService {
 	
-	String username;
-	Connection connection;
-	ICreditCardRepo d;
-	Scanner sc;
+	private String username;
+	private Connection connection;
+	private ICreditCardRepo d;
+	private Scanner sc;
+	private ValidationService validation;
 	
 	public CreditCardService(String username, Connection connection, Scanner sc) {
 		this.username = username;
 		this.connection = connection;
 		d = new CreditCardRepoDB(connection);
 		this.sc = sc;
+		validation = new ValidationService(connection, sc);
 	}
 	
 	public CreditCard createNewCreditCard() {
@@ -69,12 +71,15 @@ public class CreditCardService {
 		
 		int id = sc.nextInt();
 		
+		boolean belongsToUser = validation.permissionToModifyCard(username, id);
 		
-		boolean result = d.deleteCard(id);
-		if (result == true) {
-			System.out.println(id + " deleted successfully.");
-		} else {
-			System.out.println(id + " not deleted.");
+		if (belongsToUser == true) {
+			boolean result = d.deleteCard(id);
+			if (result == true) {
+				System.out.println(id + " deleted successfully.");
+			} else {
+				System.out.println(id + " not deleted.");
+			}
 		}
 	}
 	
@@ -89,17 +94,20 @@ public class CreditCardService {
 		
 		int id = sc.nextInt();	
 		
-		sc.nextLine();
-		System.out.println("What would you like to rename this card?");
-		String newName = sc.nextLine();
+		boolean belongsToUser = validation.permissionToModifyCard(username, id);
 		
-		boolean result = d.updateCard(id, newName);
-		if (result == true) {
-			System.out.println(id + " updated successfully.");
-		} else {
-			System.out.println(id + " not updated.");
-		} 
-		
+		if (belongsToUser == true) {
+			sc.nextLine();
+			System.out.println("What would you like to rename this card?");
+			String newName = sc.nextLine();
+			
+			boolean result = d.updateCard(id, newName);
+			if (result == true) {
+				System.out.println(id + " updated successfully.");
+			} else {
+				System.out.println(id + " not updated.");
+			} 
+		}
 	}
 
 }

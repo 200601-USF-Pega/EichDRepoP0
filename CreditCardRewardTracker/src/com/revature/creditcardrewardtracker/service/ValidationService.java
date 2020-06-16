@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Scanner;
 
+import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
+import com.revature.creditcardrewardtracker.dao.ICreditCardRepo;
 import com.revature.creditcardrewardtracker.dao.ITransactionRepo;
 import com.revature.creditcardrewardtracker.dao.IUserRepo;
 import com.revature.creditcardrewardtracker.dao.TransactionRepoDB;
 import com.revature.creditcardrewardtracker.dao.UserRepoDB;
+import com.revature.creditcardrewardtracker.models.CreditCard;
 import com.revature.creditcardrewardtracker.models.Transaction;
 
 public class ValidationService {
@@ -67,6 +70,21 @@ public class ValidationService {
 		}
 		
 		System.out.println("Transaction " + transactionId + " is not associated with this account.");
+		return false;
+	}
+	
+	//validates that the credit card belongs to the user
+	public boolean permissionToModifyCard(String username, int cardId) {
+		ICreditCardRepo ccr = new CreditCardRepoDB(connection);
+		List<CreditCard> cardsForUser = ccr.getCreditCards(username);
+		
+		for (CreditCard c : cardsForUser) {
+			if (c.getCreditCardID() == cardId) {
+				return true;
+			}
+		}
+		
+		System.out.println("Card Id " + cardId + " is not assocaited with this account.");
 		return false;
 	}
 	
