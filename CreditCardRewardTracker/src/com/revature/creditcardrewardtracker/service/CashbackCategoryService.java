@@ -18,12 +18,14 @@ public class CashbackCategoryService {
 	private String username;
 	private ICreditCardRepo d;
 	private ICreditCardRewardsRepo ccrr;
+	private ValidationService validation;
 
 	public CashbackCategoryService(String username, Connection connection, Scanner sc) {
 		this.sc = sc;
 		this.username = username;
 		ccrr = new CreditCardRewardsRepoDB(connection);
 		d = new CreditCardRepoDB(connection);
+		validation = new ValidationService(connection, sc);
 		
 	}
 	
@@ -139,15 +141,23 @@ public class CashbackCategoryService {
 	}
 	
 	private int identifyCreditCard() {
-		System.out.println("Which card? Please enter the Card ID.");
-		
-		List<CreditCard> cards = d.getCreditCards(username);
-		for (CreditCard c : cards) {
-			System.out.println(c.stringNameAndId());
+		boolean belongsToUser = false;
+		while (belongsToUser == false) {
+			System.out.println("Which card? Please enter the Card ID.");
+			
+			List<CreditCard> cards = d.getCreditCards(username);
+			for (CreditCard c : cards) {
+				System.out.println(c.stringNameAndId());
+			}
+			
+			int id = sc.nextInt();
+			belongsToUser = validation.permissionToModifyCard(username, id);
+			
+			if (belongsToUser == true) {
+				return id;
+			}
 		}
-		
-		int id = sc.nextInt();
-		return id;
+		return -1;
 	}
 	
 	private int identifyCategory() {
