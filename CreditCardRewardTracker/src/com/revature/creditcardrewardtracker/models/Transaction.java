@@ -9,6 +9,7 @@ public class Transaction {
 	private String category;
 	private double total;
 	private double cashBackTotal;
+	private int transactionId;
 
 	public Transaction() {
 		
@@ -58,6 +59,14 @@ public class Transaction {
 	public String toString() {
 		return "Transaction [cardID=" + cardID + ", date=" + date + ", category=" + category + ", total=" + total
 				+ ", cashBackTotal=" + cashBackTotal + "]";
+	}
+
+	public int getTransactionId() {
+		return transactionId;
+	}
+	
+	public void setTransactionId(int transactionId) {
+		this.transactionId = transactionId;
 	}
 
 

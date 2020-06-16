@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Scanner;
 
+import com.revature.creditcardrewardtracker.dao.ITransactionRepo;
 import com.revature.creditcardrewardtracker.dao.IUserRepo;
+import com.revature.creditcardrewardtracker.dao.TransactionRepoDB;
 import com.revature.creditcardrewardtracker.dao.UserRepoDB;
+import com.revature.creditcardrewardtracker.models.Transaction;
 
 public class ValidationService {
 
@@ -34,7 +37,6 @@ public class ValidationService {
 	}
 	
 	public boolean usernameLengthValidation(String username) {
-		
 		if(username.length() >= 5 && username.length() <= 25) {
 			return true;
 		} else {
@@ -51,6 +53,21 @@ public class ValidationService {
 			System.out.println("Password length is invalid. Please make your passowrd between 5 and 25 characters.");
 			return false;
 		}
+	}
+	
+	//validates that the transaction belongs to the user
+	public boolean permissionToModifyTransaction(String username, int transactionId) {
+		ITransactionRepo tr = new TransactionRepoDB(connection);
+		List<Transaction> transactionsForUser = tr.listTransactions(username);
+		
+		for (Transaction t : transactionsForUser) {
+			if (t.getTransactionId() == transactionId) {
+				return true;
+			}
+		}
+		
+		System.out.println("Transaction " + transactionId + " is not associated with this account.");
+		return false;
 	}
 	
 

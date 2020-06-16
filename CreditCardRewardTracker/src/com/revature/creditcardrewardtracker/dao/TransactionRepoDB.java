@@ -63,7 +63,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 		try {
 			Statement s = connection.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
+			rs = s.executeQuery("SELECT transactionid, date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "INNER JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
@@ -88,7 +88,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 		try {
 			Statement s = connection.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
+			rs = s.executeQuery("SELECT transactionid, date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "INNER JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
@@ -115,7 +115,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 		try {
 			Statement s = connection.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
+			rs = s.executeQuery("SELECT transactionid, date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "INNER JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
@@ -143,7 +143,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 		try {
 			Statement s = connection.createStatement();
 			ResultSet rs;
-			rs = s.executeQuery("SELECT date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
+			rs = s.executeQuery("SELECT transactionid, date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "INNER JOIN ("
 					+	"SELECT cardid FROM creditcards "
 					+	"WHERE username = '" + username
@@ -240,6 +240,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 				tempTransaction.setTotal(rs.getDouble("transactiontotal"));
 				tempTransaction.setDate(convertSQLToUtilDate(rs.getDate("date")));
 				tempTransaction.setCashBackTotal(rs.getDouble("cashbacktotal"));
+				tempTransaction.setTransactionId(rs.getInt("transactionid"));
 				transactionList.add(tempTransaction);
 			}
 			return transactionList;
