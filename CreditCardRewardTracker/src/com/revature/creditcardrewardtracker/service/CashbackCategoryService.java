@@ -66,15 +66,7 @@ public class CashbackCategoryService {
 	}
 	
 	public void addCashbackCategory() {
-		//CategoryCashBack category = new CategoryCashBack();
-		System.out.println("Which card would you like to add a new category to? Please enter the Card ID.");
-		
-		List<CreditCard> cards = d.getCreditCards(username);
-		for (CreditCard c : cards) {
-			System.out.println(c.stringNameAndId());
-		}
-		
-		int id = sc.nextInt();
+		int id = this.identifyCreditCard();
 		
 		sc.nextLine();
 		System.out.println("What is the name of the category?");
@@ -93,6 +85,79 @@ public class CashbackCategoryService {
 			System.out.println("Category failed to be added.");
 		}
 		
+	}
+	
+	public void updateCashbackCategory() {
+		int category = this.identifyCategory();
+		
+		System.out.println("Which attribute of this category would you like to modify?");
+		System.out.println("Enter 0 for category or 1 for percentage of cash back.");
+		int option = sc.nextInt();
+		
+		sc.nextLine();
+		
+		Object obj;
+		boolean result = false;
+		
+		switch (option) {
+		case (0) :
+			System.out.println("Please enter the new category name.");
+			obj = sc.nextLine();
+			result = ccrr.updateCashBackCategory(category, option, obj);
+			break;
+		case (1) :
+			System.out.println("Please enter the new cash back rate as a decimal. For example, 5% would 0.05.");
+			obj = sc.nextDouble();
+			result = ccrr.updateCashBackCategory(category, option, obj);
+			break;
+		default :
+			System.out.println("Invalid selection.");
+		}
+		
+		if (result == true) {
+			System.out.println("Category " + category + " successfully updated.");
+		} else {
+			System.out.println("Category failed to be updated.");
+		}  
+	}
+	
+	public void deleteCashbackCategory() {
+		int category = this.identifyCategory();
+		
+		boolean result = ccrr.deleteCashBackCategory(category);
+		if (result == true) {
+			System.out.println("Category " + category + " was successfully removed from database.");
+		} else {
+			System.out.println("Category failed to be removed.");
+		}
+	}
+	
+	public void printCashBackCategories() {
+		int id = this.identifyCreditCard();
+		List<CategoryCashBack> list = ccrr.getCashBackCategories(id);
+		System.out.println(list);
+	}
+	
+	private int identifyCreditCard() {
+		System.out.println("Which card? Please enter the Card ID.");
+		
+		List<CreditCard> cards = d.getCreditCards(username);
+		for (CreditCard c : cards) {
+			System.out.println(c.stringNameAndId());
+		}
+		
+		int id = sc.nextInt();
+		return id;
+	}
+	
+	private int identifyCategory() {
+		int id = this.identifyCreditCard();
+		
+		System.out.println("Which category would you like to modify? Please enter the Reward Id number.");
+		//System.out.println(ccrr.getCashBackCategories(id));
+		ccrr.printCashBackCategories(id);
+		int categoryId = sc.nextInt();
+		return categoryId;
 	}
 
 }

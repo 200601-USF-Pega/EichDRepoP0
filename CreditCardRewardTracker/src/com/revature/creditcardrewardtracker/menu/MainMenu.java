@@ -44,8 +44,8 @@ public class MainMenu implements IUserMenu {
 				//add to transaction history
 				//records the transaction date (used to make transaction ID), credit card used, category, and total spent
 				System.out.println("Launching database to add new transaction record");
-				TransactionService transactionService = new TransactionService(username, connection);
-				System.out.println(transactionService.recordNewTransaction(sc));
+				TransactionService transactionService = new TransactionService(username, connection, sc);
+				System.out.println(transactionService.recordNewTransaction());
 				listMenuOptions();
 				break;
 			case (3) :

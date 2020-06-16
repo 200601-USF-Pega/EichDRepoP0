@@ -24,7 +24,7 @@ public class TransactionHistoryMenu implements IUserMenu {
 		//Scanner sc = new Scanner(System.in);
 		listMenuOptions();
 		
-		TransactionService service = new TransactionService(username, connection);
+		TransactionService service = new TransactionService(username, connection, sc);
 		
 		int menuOption = sc.nextInt();
 		
@@ -40,17 +40,17 @@ public class TransactionHistoryMenu implements IUserMenu {
 				break;
 			case (1) :
 				//calc total spent in a certain category
-				System.out.println(service.getTotalForCategories(sc));
+				System.out.println(service.getTotalForCategories());
 				listMenuOptions();
 				break;
 			case (2) :
 				//calc total spent on a specific cc
-				System.out.println(service.getTotalForCard(sc));
+				System.out.println(service.getTotalForCard());
 				listMenuOptions();
 				break;
 			case (3) :
 				//calc total spent for date range
-				System.out.println(service.getTotalForDateRange(sc));
+				System.out.println(service.getTotalForDateRange());
 				listMenuOptions();
 				break;
 			case (4) :
@@ -60,27 +60,27 @@ public class TransactionHistoryMenu implements IUserMenu {
 				break;
 			case (5) :
 				//calc total cash back for category
-				System.out.println("Total Cash Back for Category is $" + service.getTotalCashBackForCategories(sc));
+				System.out.println("Total Cash Back for Category is $" + service.getTotalCashBackForCategories());
 				listMenuOptions();
 				break;
 			case (6) :
 				//calc total cash back for CC
-				System.out.println("Total Cash Back for Card is $" + service.getTotalCashBackForCard(sc));
+				System.out.println("Total Cash Back for Card is $" + service.getTotalCashBackForCard());
 				listMenuOptions();
 				break;
 			case (7) :
 				//calc total cash back for date range
-				System.out.println("Total Cash Back for Date Range is $" + service.getTotalCashBackForDateRange(sc));
+				System.out.println("Total Cash Back for Date Range is $" + service.getTotalCashBackForDateRange());
 				listMenuOptions();
 				break;
 			case (8) :
 				// remove transaction from records
-				service.removeTransaction(sc);
+				service.removeTransaction();
 				listMenuOptions();
 				break;
 			case (9) :
 				// update transaction in records
-				service.updateTransaction(sc);
+				service.updateTransaction();
 				listMenuOptions();
 				break;
 			case (10) :
